@@ -1,5 +1,5 @@
 {% from "_formhelpers.html" import render_field %}
-<form method=post action="/form">
+<form method=post action="{{action}}">
   {% for field in form %}
     {{field.text}}
   <input type="text" name="{{field.name}}">

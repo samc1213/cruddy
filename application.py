@@ -7,6 +7,7 @@ from boto.dynamodb2 import connect_to_region
 from boto.dynamodb2.items import Item
 from boto.dynamodb2.fields import HashKey
 from boto.dynamodb2.table import Table
+import uuid
 # from forms import RegistrationForm
 DEBUG = True
 SECRET_KEY = 'development key'
@@ -26,7 +27,6 @@ entities = Table('entities', connection=conn)
 application.logger.debug(entities.get_item(entityname='peepee'))
 # conn.get_table('entities')
 # don't do this in production - use from_envvar
-# entities = Table.create('entities', schema=[HashKey('entityname')])
 
 # user = Item(users, data={'username':'sam','boob':'big'})
 # user.save(overwrite=True)
@@ -52,18 +52,33 @@ def form():
         inputdata = {'entityname':request.form['entity'],'field1':request.form['field1'],'field2':request.form['field2']}
         application.logger.debug(inputdata)
         entities.put_item(data=inputdata)
+        Table.create(request.form['entity'], schema=[HashKey('uuid')], connection=conn)
         # app.logger.debug(entities.get_item(entityname = form.entityname.data))
         flash('Thanks for registering')
         return redirect(url_for('index'))
-    return render_template('form.html', form=form)
+    return render_template('form.html', form=form, action='/form')
 
 @application.route('/seemyform/<ename>', methods=['GET', 'POST'])
 def seemyform(ename):
     ent = entities.get_item(entityname=ename)
+    acc = '/seemyform/'+ename
     form = []
     form.append({'name':'field1', 'text':ent['field1']})
     form.append({'name':'field2', 'text':ent['field2']})
-    return render_template('form.html', form=form)
+    if request.method == 'POST':
+        inputdata = {'uuid':str(uuid.uuid4()),ent['field1']:request.form['field1'],ent['field2']:request.form['field2']}
+        curentity = Table(ename, connection=conn)
+        curentity.put_item(data = inputdata)
+    return render_template('form.html', form=form, action=acc)
+
+@application.route('/seemylist/<ename>', methods=['GET'])
+def seemylist(ename):
+    entitytable = Table(ename, connection=conn)
+    dictlist = [dict(inst) for inst in entitytable.scan()]
+    application.logger.debug(dictlist)
+    # return render_template('form.html', form=form, action=acc)
+    return render_template('list.html', dictlist=dictlist)
+
 
 if __name__ == '__main__':
     application.run()
