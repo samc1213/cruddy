@@ -35,7 +35,7 @@ application.logger.debug(entities.get_item(entityname='peepee'))
 
 @application.route('/')
 def index():
-    return 'Index Page'
+    return render_template('index.html')
 #
 @application.route('/form', methods=['GET', 'POST'])
 def form():
@@ -60,6 +60,7 @@ def form():
 
 @application.route('/seemyform/<ename>', methods=['GET', 'POST'])
 def seemyform(ename):
+    application.logger.debug(ename)
     ent = entities.get_item(entityname=ename)
     acc = '/seemyform/'+ename
     form = []
