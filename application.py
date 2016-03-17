@@ -45,10 +45,10 @@ def form():
         # user = User(form.username.data, form.email.data,
         #             form.password.data)
         # db_session.add(user)
-        inputdata = {'entityname':request.form['entity'],'field1':request.form['field1'],'field2':request.form['field2']}
+        inputdata = {'entityname':request.form['entityname']}
         application.logger.debug(inputdata)
         entities.put_item(data=inputdata)
-        Table.create(request.form['entity'], schema=[HashKey('uuid')], connection=conn)
+        Table.create(request.form['entityname'], schema=[HashKey('uuid')], connection=conn)
         # app.logger.debug(entities.get_item(entityname = form.entityname.data))
         flash('Thanks for registering')
         return redirect(url_for('index'))
