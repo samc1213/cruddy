@@ -1,18 +1,25 @@
 $(document).ready(function() {
   console.log("ready!");
-  var numfields = 2;
+  numfields = 2;
 
-  $form = $("#newentityform");
-  addnewfield(numfields, $form);
+  $form = $('#newentityform');
+  $newfieldbtn = $('#newfieldbtn');
+  $newfieldbtn.click(addnewfield);
+
+
 });
 
-
-function addnewfield(numfields, $formobj) {
-  $formobj.append(makenewinputformgroup(numfields));
+function addnewfield() {
+  console.log('addingnewfiled');
+  var lastfieldid = 'fg' + (numfields - 1);
+  console.log(lastfieldid);
+  $lastformgroup = $form.find('#' + lastfieldid);
+  $lastformgroup.after(makenewinputformgroup(numfields));
+  numfields += 1;
 }
 
 function makenewinputformgroup(formgroupnumber) {
-  return '<div class="form-group" id="' + formgroupnumber + '"> \
+  return '<div class="form-group" id="fg' + formgroupnumber + '"> \
   <label for="entityname">Field ' + formgroupnumber + ':</label> \
     <input type="text" name="field' + formgroupnumber + '" id="field' + formgroupnumber + '" class="form-control" placeholder="e.g. ' + returnfieldexample(formgroupnumber) + '"> \
   </div>';
