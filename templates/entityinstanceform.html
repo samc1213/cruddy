@@ -4,7 +4,7 @@
 <form method=post action="{{action}}">
   {% for field in form %}
     {{field.text}}
-  <input type="text" name="{{field.name}}">
+  <input type="text" name="{{field.name}}"><br>
   {% endfor %}
   <p><input type=submit class="btn btn-default" value="Submit">
 </form>

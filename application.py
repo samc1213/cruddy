@@ -40,10 +40,6 @@ def index():
 @application.route('/form', methods=['GET', 'POST'])
 def form():
     # form = RegistrationForm(request.form)
-    form = []
-    form.append({'name':'entity', 'text':'Input the name of your entity'})
-    form.append({'name':'field1', 'text':"Input the name of your entity's first field"})
-    form.append({'name':'field2', 'text':"Input the name of your entity's second field"})
     if request.method == 'POST':
         # form = request.form
         # user = User(form.username.data, form.email.data,
@@ -56,7 +52,7 @@ def form():
         # app.logger.debug(entities.get_item(entityname = form.entityname.data))
         flash('Thanks for registering')
         return redirect(url_for('index'))
-    return render_template('form.html', form=form, action='/form')
+    return render_template('newentityform.html', form=form, action='/form')
 
 @application.route('/seemyform/<ename>', methods=['GET', 'POST'])
 def seemyform(ename):
@@ -70,7 +66,7 @@ def seemyform(ename):
         inputdata = {'uuid':str(uuid.uuid4()),ent['field1']:request.form['field1'],ent['field2']:request.form['field2']}
         curentity = Table(ename, connection=conn)
         curentity.put_item(data = inputdata)
-    return render_template('form.html', form=form, action=acc)
+    return render_template('entityinstanceform.html', form=form, action=acc)
 
 @application.route('/seemylist/<ename>', methods=['GET'])
 def seemylist(ename):
