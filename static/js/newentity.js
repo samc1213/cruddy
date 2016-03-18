@@ -1,21 +1,21 @@
 $(document).ready(function() {
   console.log("ready!");
-  numfields = 2;
+  numfields = 1;
 
   $form = $('#newentityform');
   $newfieldbtn = $('#newfieldbtn');
+  $numfieldsinput = $('#numfieldsinput');
   $newfieldbtn.click(addnewfield);
-
-
 });
 
 function addnewfield() {
   console.log('addingnewfiled');
-  var lastfieldid = 'fg' + (numfields - 1);
+  var lastfieldid = 'fg' + (numfields);
   console.log(lastfieldid);
   $lastformgroup = $form.find('#' + lastfieldid);
-  $lastformgroup.after(makenewinputformgroup(numfields));
   numfields += 1;
+  $lastformgroup.after(makenewinputformgroup(numfields));
+  $numfieldsinput.val(numfields);
 }
 
 function makenewinputformgroup(formgroupnumber) {

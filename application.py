@@ -8,6 +8,7 @@ from boto.dynamodb2.items import Item
 from boto.dynamodb2.fields import HashKey
 from boto.dynamodb2.table import Table
 import uuid
+import json
 # from forms import RegistrationForm
 DEBUG = True
 SECRET_KEY = 'development key'
@@ -39,19 +40,19 @@ def index():
 #
 @application.route('/form', methods=['GET', 'POST'])
 def form():
-    # form = RegistrationForm(request.form)
     if request.method == 'POST':
-        # form = request.form
-        # user = User(form.username.data, form.email.data,
-        #             form.password.data)
-        # db_session.add(user)
-        inputdata = {'entityname':request.form['entityname']}
-        application.logger.debug(inputdata)
+        entityname = request.form['entityname']
+        numfields = int(request.form['numfields'])
+        inputdata = {'entityname':entityname}
+        fields = {}
+        for fieldnumber in range(1, numfields + 1):
+            fieldstring = 'field' + str(fieldnumber)
+            fields[fieldstring] = request.form[fieldstring]
+        inputdata['numfields'] = numfields
+        inputdata['fields'] = json.dumps(fields)
         entities.put_item(data=inputdata)
-        Table.create(request.form['entityname'], schema=[HashKey('uuid')], connection=conn)
-        # app.logger.debug(entities.get_item(entityname = form.entityname.data))
-        flash('Thanks for registering')
-        return redirect(url_for('index'))
+        Table.create(entityname, schema=[HashKey('uuid')], connection=conn)
+        return redirect(url_for('seemyform', ename=entityname))
     return render_template('newentityform.html', form=form, action='/form')
 
 @application.route('/seemyform/<ename>', methods=['GET', 'POST'])
@@ -60,13 +61,16 @@ def seemyform(ename):
     ent = entities.get_item(entityname=ename)
     acc = '/seemyform/'+ename
     form = []
-    form.append({'name':'field1', 'text':ent['field1']})
-    form.append({'name':'field2', 'text':ent['field2']})
+    numfields = ent['numfields']
+    fields = json.loads(ent['fields'])
+    for fieldnumber in range(1, numfields + 1):
+        fieldstring = 'field' + str(fieldnumber)
+        form.append({'name':fieldstring, 'text':fields[fieldstring]})
     if request.method == 'POST':
         inputdata = {'uuid':str(uuid.uuid4()),ent['field1']:request.form['field1'],ent['field2']:request.form['field2']}
         curentity = Table(ename, connection=conn)
         curentity.put_item(data = inputdata)
-    return render_template('entityinstanceform.html', form=form, action=acc)
+    return render_template('entityinstanceform.html', form=form, action=acc, entityname=ename)
 
 @application.route('/seemylist/<ename>', methods=['GET'])
 def seemylist(ename):
