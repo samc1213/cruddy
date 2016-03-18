@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% block title %}New Entity{% endblock %}
+{% block content %}
 {% for dict in dictlist %}
 -------------
 <dl>
@@ -7,3 +10,4 @@
       {% endfor %}
 </dl>
 {% endfor %}
+{% endblock %}

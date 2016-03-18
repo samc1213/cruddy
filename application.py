@@ -25,7 +25,7 @@ conn = DynamoDBConnection(
 # application.logger.debug(conn.list_tables())
 entities = Table('entities', connection=conn)
 
-application.logger.debug(entities.get_item(entityname='peepee'))
+# application.logger.debug(entities.get_item(entityname='peepee'))
 # conn.get_table('entities')
 # don't do this in production - use from_envvar
 
@@ -67,18 +67,33 @@ def seemyform(ename):
         fieldstring = 'field' + str(fieldnumber)
         form.append({'name':fieldstring, 'text':fields[fieldstring]})
     if request.method == 'POST':
-        inputdata = {'uuid':str(uuid.uuid4()),ent['field1']:request.form['field1'],ent['field2']:request.form['field2']}
+        inputdata = {'uuid':str(uuid.uuid4())}
+        for fieldnumber in range(1, numfields + 1):
+            fieldstring = 'field' + str(fieldnumber)
+            inputdata[fieldstring] = request.form[fieldstring]
         curentity = Table(ename, connection=conn)
         curentity.put_item(data = inputdata)
+        return redirect(url_for('seemylist', ename=ename))
     return render_template('entityinstanceform.html', form=form, action=acc, entityname=ename)
 
 @application.route('/seemylist/<ename>', methods=['GET'])
 def seemylist(ename):
     entitytable = Table(ename, connection=conn)
     dictlist = [dict(inst) for inst in entitytable.scan()]
+    curentity = entities.get_item(entityname=ename)
+    fields = json.loads(curentity['fields'])
+    outputdictlist = []
+    for d in dictlist:
+        for key, value in d.iteritems():
+            if key[0:5] == 'field':
+                application.logger.debug(key)
+                fieldname = fields[key]
+                newdict = {}
+                newdict[fieldname] = d[key]
+                outputdictlist.append(newdict)
     application.logger.debug(dictlist)
     # return render_template('form.html', form=form, action=acc)
-    return render_template('list.html', dictlist=dictlist)
+    return render_template('list.html', dictlist=outputdictlist)
 
 
 if __name__ == '__main__':
