@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/newentityform.css')}}" />
+{% endblock %}
 {% block title %}New Entity{% endblock %}
 {% block content %}
 <div class="col-md-3">
@@ -8,10 +11,6 @@
     <div class="form-group" id="fg0">
       <label for="entityname">Entity Name:</label>
       <input type="text" name="entityname" id="entityname" class="form-control" placeholder="e.g. User">
-    </div>
-    <div class="form-group" id="fg1">
-      <label for="entityname">Field 1:</label>
-      <input type="text" name="field1" id="field1" class="form-control" placeholder="e.g. First Name">
     </div>
     <button type="button" id="newfieldbtn" class="btn btn-default">Add a New Field!</button>
     <input type="hidden" name="numfields" id="numfieldsinput" value="1">

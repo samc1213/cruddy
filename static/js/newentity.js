@@ -1,11 +1,12 @@
 $(document).ready(function() {
   console.log("ready!");
-  numfields = 1;
-
+  numfields = 0;
   $form = $('#newentityform');
   $newfieldbtn = $('#newfieldbtn');
   $numfieldsinput = $('#numfieldsinput');
   $newfieldbtn.click(addnewfield);
+
+  addnewfield();
 });
 
 function addnewfield() {
@@ -19,9 +20,16 @@ function addnewfield() {
 }
 
 function makenewinputformgroup(formgroupnumber) {
-  return '<div class="form-group" id="fg' + formgroupnumber + '"> \
-  <label for="entityname">Field ' + formgroupnumber + ':</label> \
-    <input type="text" name="field' + formgroupnumber + '" id="field' + formgroupnumber + '" class="form-control" placeholder="e.g. ' + returnfieldexample(formgroupnumber) + '"> \
+  return '<div class="form-group fieldgroup" id="fg' + formgroupnumber + '"> \
+  <h3>Field ' + formgroupnumber + '</h3>\
+  <label for="field' + formgroupnumber + 'name">Name:</label> \
+    <input type="text" name="field' + formgroupnumber + 'name" id="field' + formgroupnumber + 'name" class="form-control fieldname" placeholder="e.g. ' + returnfieldexample(formgroupnumber) + '"> \
+    <label for="field'+ formgroupnumber + 'type">Type:</label> \
+    <select name="field' + formgroupnumber + 'type" id="field' + formgroupnumber + 'type" class="form-control fieldtype"> \
+    <option value="string">Text</option> \
+    <option value="int">Whole Number</option> \
+    <option value="float">Decimal Number</option> \
+    </select> \
   </div>';
 }
 
