@@ -46,7 +46,7 @@ def form():
         inputdata = {'entityname':entityname}
         fields = {}
         for fieldnumber in range(1, numfields + 1):
-            fieldstring = 'field' + str(fieldnumber)
+            fieldstring = 'fieldname' + str(fieldnumber)
             fields[fieldstring] = request.form[fieldstring]
         inputdata['numfields'] = numfields
         inputdata['fields'] = json.dumps(fields)
@@ -64,12 +64,12 @@ def seemyform(ename):
     numfields = ent['numfields']
     fields = json.loads(ent['fields'])
     for fieldnumber in range(1, numfields + 1):
-        fieldstring = 'field' + str(fieldnumber)
+        fieldstring = 'fieldname' + str(fieldnumber)
         form.append({'name':fieldstring, 'text':fields[fieldstring]})
     if request.method == 'POST':
         inputdata = {'uuid':str(uuid.uuid4())}
         for fieldnumber in range(1, numfields + 1):
-            fieldstring = 'field' + str(fieldnumber)
+            fieldstring = 'fieldname' + str(fieldnumber)
             inputdata[fieldstring] = request.form[fieldstring]
         curentity = Table(ename, connection=conn)
         curentity.put_item(data = inputdata)

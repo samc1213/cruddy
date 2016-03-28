@@ -23,7 +23,7 @@ function makenewinputformgroup(formgroupnumber) {
   return '<div class="form-group fieldgroup" id="fg' + formgroupnumber + '"> \
   <h3>Field ' + formgroupnumber + '</h3>\
   <label for="field' + formgroupnumber + 'name">Name:</label> \
-    <input type="text" name="field' + formgroupnumber + 'name" id="field' + formgroupnumber + 'name" class="form-control fieldname" placeholder="e.g. ' + returnfieldexample(formgroupnumber) + '"> \
+    <input type="text" name="fieldname' + formgroupnumber + '" id="field' + formgroupnumber + 'name" class="form-control fieldname" placeholder="e.g. ' + returnfieldexample(formgroupnumber) + '"> \
     <label for="field'+ formgroupnumber + 'type">Type:</label> \
     <select name="field' + formgroupnumber + 'type" id="field' + formgroupnumber + 'type" class="form-control fieldtype"> \
     <option value="string">Text</option> \
