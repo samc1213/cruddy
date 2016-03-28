@@ -76,6 +76,18 @@ def seemyform(ename):
         return redirect(url_for('seemylist', ename=ename))
     return render_template('entityinstanceform.html', form=form, action=acc, entityname=ename)
 
+
+
+#code finds the element of the keytochange and has the entityname of the thing, just need to update database, refreshes page aferwards
+@application.route('/increment/<ename>', methods=['GET', 'POST'])
+def increment(ename):
+    if request.method == 'POST':
+        keytofind = request.form['keytochange']
+        application.logger.debug(keytofind)
+        return redirect(url_for('seemylist', ename=ename))
+
+
+
 @application.route('/seemylist/<ename>', methods=['GET'])
 def seemylist(ename):
     entitytable = Table(ename, connection=conn)
@@ -83,6 +95,7 @@ def seemylist(ename):
     curentity = entities.get_item(entityname=ename)
     fields = json.loads(curentity['fields'])
     outputdictlist = []
+    acc = '/increment/'+ename
     for d in dictlist:
         for key, value in d.iteritems():
             if key[0:5] == 'field':
@@ -93,7 +106,8 @@ def seemylist(ename):
                 outputdictlist.append(newdict)
     application.logger.debug(dictlist)
     # return render_template('form.html', form=form, action=acc)
-    return render_template('list.html', dictlist=outputdictlist)
+    return render_template('list.html', dictlist=outputdictlist, entityname=ename, action=acc)
+
 
 
 if __name__ == '__main__':

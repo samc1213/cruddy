@@ -3,11 +3,21 @@
 {% block content %}
 {% for dict in dictlist %}
 -------------
+<!-- I moved the for line up one is this gonna fuck it up?-->
+{% for key, value in dict.iteritems() %}
 <dl>
-  {% for key, value in dict.iteritems() %}
+  
             <dt>{{ key }}</dt>
             <dd>{{ value }}</dd>
-      {% endfor %}
+      
 </dl>
+<form action="{{action}}" method="post">
+	<input type="hidden" name="keytochange" id="keytochangeid" value="{{key}}">
+    <button type="submit" class = "btn btn-default"> Increment!</button>
+</form>
 {% endfor %}
+
+
+{% endfor %}
+
 {% endblock %}
