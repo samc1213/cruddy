@@ -82,11 +82,18 @@ def seemyform(ename):
 @application.route('/increment/<ename>', methods=['GET', 'POST'])
 def increment(ename):
     if request.method == 'POST':
-        keytofind = request.form['keytochange']
-        application.logger.debug(keytofind)
-        return redirect(url_for('seemylist', ename=ename))
-
-
+        uuid = request.form['uuid']
+        fieldname = request.form['fieldname']
+        entityname = ename
+        entitytable = Table(entityname, connection = conn)
+        entityinstancetoincrement = entitytable.get_item(
+            uuid=uuid
+        )
+        oldval = int(entityinstancetoincrement[fieldname])
+        newval = oldval + 1
+        entityinstancetoincrement[fieldname] = newval
+        entityinstancetoincrement.save()
+        return ('', 204)
 
 @application.route('/seemylist/<ename>', methods=['GET'])
 def seemylist(ename):
@@ -94,19 +101,24 @@ def seemylist(ename):
     dictlist = [dict(inst) for inst in entitytable.scan()]
     curentity = entities.get_item(entityname=ename)
     fields = json.loads(curentity['fields'])
-    outputdictlist = []
-    acc = '/increment/'+ename
+    acc = '/increment/' + ename
+    outputentitylist = []
     for d in dictlist:
+        newentity = {}
+        newentity['fields'] = {}
+        application.logger.debug(d)
         for key, value in d.iteritems():
+            application.logger.debug('key' + key)
             if key[0:5] == 'field':
-                application.logger.debug(key)
                 fieldname = fields[key]
-                newdict = {}
-                newdict[fieldname] = d[key]
-                outputdictlist.append(newdict)
-    application.logger.debug(dictlist)
+                newentity['fields'][fieldname] = (d[key], key)
+            if key == 'uuid':
+                newentity['uuid'] = value
+        outputentitylist.append(newentity)
+    application.logger.debug(outputentitylist)
+
     # return render_template('form.html', form=form, action=acc)
-    return render_template('list.html', dictlist=outputdictlist, entityname=ename, action=acc)
+    return render_template('list.html', entitylist=outputentitylist, entityname=ename, action=acc)
 
 
 

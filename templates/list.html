@@ -1,20 +1,23 @@
 {% extends "base.html" %}
 {% block title %}New Entity{% endblock %}
 {% block content %}
-{% for dict in dictlist %}
--------------
+{% for entityinstance in entitylist recursive %}
+_______________
 <!-- I moved the for line up one is this gonna fuck it up?-->
-{% for key, value in dict.iteritems() %}
-<dl>
-  
-            <dt>{{ key }}</dt>
-            <dd>{{ value }}</dd>
-      
-</dl>
-<form action="{{action}}" method="post">
-	<input type="hidden" name="keytochange" id="keytochangeid" value="{{key}}">
-    <button type="submit" class = "btn btn-default"> Increment!</button>
-</form>
+{% for fieldname, value in entityinstance["fields"].iteritems() %}
+
+  <dl>
+
+              <dt>{{ fieldname }}</dt>
+              <dd>{{ value.0 }}</dd>
+
+  </dl>
+  <form action="{{action}}" method="post">
+  	<input type="hidden" name="uuid" id="uuidid" value="{{entityinstance['uuid']}}">
+    <input type="hidden" name="fieldname" id="fieldnameid" value="{{ value.1 }}">
+      <button type="submit" class = "btn btn-default"> Increment!</button>
+  </form>
+
 {% endfor %}
 
 
