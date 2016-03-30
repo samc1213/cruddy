@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block styles %}
 <link rel="stylesheet" href="{{url_for('static', filename='css/newentityform.css')}}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" />
+
 {% endblock %}
 {% block title %}New Entity{% endblock %}
 {% block content %}
@@ -15,7 +17,9 @@
     <button type="button" id="newfieldbtn" class="btn btn-default">Add a New Field!</button>
     <input type="hidden" name="numfields" id="numfieldsinput" value="1">
     <input type=submit class="btn btn-default" value="Submit">
-
+    <select>
+    <option value='hi'>hi</option>
+  </select>
   </form>
 </div>
 <div class="col-md-3">

@@ -72,7 +72,6 @@ def seemyform(ename):
     form = []
     numfields = ent['numfields']
     fields = json.loads(ent['fields'])
-    entitychildtexts = []
     for fieldnumber in range(1, numfields + 1):
         fieldstring = 'fieldname' + str(fieldnumber)
         fieldtype = fields['fieldtype' + str(fieldnumber)]
@@ -83,20 +82,11 @@ def seemyform(ename):
             entitychildinfo = dictlist
             childentity = entities.get_item(entityname=entitychildname)
             childfieldnames = json.loads(childentity['fields'])
-            entitychildtext = ""
-            for curdict in dictlist:
-                for key, val in curdict.iteritems():
-                    if key != "uuid":
-                        entitychildtext += (str(childfieldnames[key]) + " | " + str(val))
-                    else:
-                        curuuid = val
-                entitychildtexts.append((entitychildtext, curuuid))
         else:
             entitychildname = None
             entitychildinfo = None
-            childfieldnames = None
-            entitychildtext = None
-        form.append({'name':fieldstring, 'text':fields[fieldstring], 'type':fieldtype, 'entitychildinfo': entitychildinfo, 'childfieldnames': childfieldnames, 'entitychildtexts': entitychildtexts})
+            childfielnames = None
+        form.append({'name':fieldstring, 'text':fields[fieldstring], 'type':fieldtype, 'entitychildinfo': entitychildinfo, 'childfieldnames': childfieldnames})
     if request.method == 'POST':
         inputdata = {'uuid':str(uuid.uuid4())}
         for fieldnumber in range(1, numfields + 1):
@@ -149,14 +139,12 @@ def seemylist(ename):
                 if fieldtype == 'entity':
                     entitychildname = fields['entitychildname' + fieldnumber]
                     childentitytable = Table(entitychildname, connection=conn)
-                    application.logger.debug('ISTHISTHEUUID' + d[key])
-                    childentity = childentitytable.get_item(uuid = d[key])
-                    fieldvalue = json.dumps(dict(childentity))
+                    dictlist = [dict(inst) for inst in childentitytable.scan()]
+                    entitychildinfo = dictlist
                 else:
                     entitychildname = None
                     entitychildinfo = None
-                    fieldvalue = d[key]
-                newentity['fields'][fieldname] = (fieldvalue, fieldconversiondict[fieldtype], entitychildname)
+                newentity['fields'][fieldname] = (d[key], fieldconversiondict[fieldtype], entitychildname, entitychildinfo)
             if key == 'uuid':
                 newentity['uuid'] = value
         application.logger.debug('NEWENT' + json.dumps(newentity))

@@ -10,17 +10,13 @@
 {% for entityinstance in entitylist recursive %}
 <div class="entityinstance">
 <!-- I moved the for line up one is this gonna fuck it up?-->
-{% for fieldname, value in entityinstance["fields"].iteritems() recursive %}
+{% for fieldname, value in entityinstance["fields"].iteritems() %}
 
   <dl>
+
               <dt>{{ fieldname }}</dt>
-              {% if value.2 %}
-              <dd><i>{{ value.1 }} - {{ value.2 }} </i></dd>
-              {% else %}
-              <dd><i>{{ value.1 }}</i></dd>
-              {% endif %}
               <dd>{{ value.0 }}</dd>
-              <dd>{{ value.2 }}</dd>
+
   </dl>
   <!-- <form action="{{action}}" method="post">
   	<input type="hidden" name="uuid" id="uuidid" value="{{entityinstance['uuid']}}">
