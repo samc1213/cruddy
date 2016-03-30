@@ -1,5 +1,5 @@
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash
+     abort, render_template, flash, Markup
 from boto.dynamodb2 import regions
 from boto.dynamodb2.layer1 import DynamoDBConnection
 from boto.regioninfo import RegionInfo
@@ -150,8 +150,14 @@ def seemylist(ename):
                     entitychildname = fields['entitychildname' + fieldnumber]
                     childentitytable = Table(entitychildname, connection=conn)
                     application.logger.debug('ISTHISTHEUUID' + d[key])
-                    childentity = childentitytable.get_item(uuid = d[key])
-                    fieldvalue = json.dumps(dict(childentity))
+                    childentityitem = childentitytable.get_item(uuid = d[key])
+                    fieldvalue = ""
+                    childentity = entities.get_item(entityname=entitychildname)
+                    childfieldnames = json.loads(childentity['fields'])
+                    for childfield, childvalue in dict(childentityitem).iteritems():
+                        if childfield != 'uuid':
+                            fieldvalue += '<b>' + childfieldnames[childfield]+ '</b> ' + childvalue + '<br>'
+                    fieldvalue = Markup(fieldvalue)
                 else:
                     entitychildname = None
                     entitychildinfo = None
