@@ -130,7 +130,11 @@ def seemyform(ename):
                 file = request.files[fieldstring]
                 if file:
                     filename = file.filename
-                    file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+                    localfilename = os.path.join(application.config['UPLOAD_FOLDER'], filename)
+                    file.save(localfilename)
+                    k = boto.s3.key.Key(bucket)
+                    k.key = ename + '/' + filename
+                    k.set_contents_from_filename(localfilename)
             else:
                 inputdata[fieldstring] = request.form[fieldstring]
         curentity = Table(ename, connection=conn)
