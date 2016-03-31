@@ -6,9 +6,13 @@ $(document).ready(function() {
   $numfieldsinput = $('#numfieldsinput');
   $newfieldbtn.click(addnewfield);
   $form.on('change', '.fieldtype', fieldchange);
+  $form.on('DOMNodeInserted', '.fieldtype', fieldchange);
   $form.on('click', '.actiontoggle', toggleaction);
   addnewfield();
 });
+
+actionsavailable = {'int':['add', 'subtract'], 'float':null, 'string':null, 'entity':null}
+actionprettytext = {'add': 'Add', 'subtract':'Subtract'}
 
 function toggleaction() {
   console.log('toggle');
@@ -28,6 +32,24 @@ function toggleaction() {
 function fieldchange() {
   console.log($(this).attr('number'));
   formgroupnumber = $(this).attr('number');
+  $actionarea = $(this).siblings('.actionarea');
+  var fieldtype = $(this).val();
+  console.log('ft' + fieldtype);
+  var actionsavailablelist =  actionsavailable[fieldtype]
+  if (actionsavailablelist == null) {
+    console.log('nully');
+    $actionarea.text('There are no actions available for this field type.');
+  }
+  else {
+    var actionselectortext = '<label>Action</label><select class="form-control actionname" name="actionname' + formgroupnumber + '-1">';
+    for (i = 0; i < actionsavailablelist.length; i++) {
+      actionselectortext += '<option value="' + actionsavailablelist[i] + '">' + actionprettytext[actionsavailablelist[i]] + '</option>';
+    }
+    actionselectortext += '</select>';
+    var valueselectortext = '<label>Value</label><input name="actionqualifier' + formgroupnumber + '-1" class="form-control" type="number"/>';
+    actionselectortext += valueselectortext
+    $actionarea.html(actionselectortext);
+  }
   if ($(this).val() == 'entity') {
     var childentitynamefield = '<label class="entitychildnamelabel" for="entitychildname' + formgroupnumber + '">Entity Child Name:</label> \
     <input type="text" name="entitychildname' + formgroupnumber + '" id="entitychildname' + formgroupnumber + '" class="form-control entitychildname">';

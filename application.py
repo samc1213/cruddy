@@ -43,6 +43,7 @@ def index():
 @application.route('/form', methods=['GET', 'POST'])
 def form():
     if request.method == 'POST':
+        application.logger.debug('formdata' + json.dumps(request.form))
         entityname = request.form['entityname']
         numfields = int(request.form['numfields'])
         inputdata = {'entityname':entityname}
@@ -56,6 +57,15 @@ def form():
             entitychildname = request.form.get(entitychildstring, None)
             if entitychildname:
                 fields[entitychildstring] = entitychildname
+            # PLAEHOLDER - WILL EVENTUALLY STORE NUMACTIONS IN form
+            numactions = 1
+            for actionnumber in range(1, numactions + 1):
+                actionname = 'actionname' + str(fieldnumber) + '-' + str(actionnumber)
+                actionvaluestring = 'actionqualifier' + str(fieldnumber) + '-' + str(actionnumber)
+                fields[actionname] = request.form[actionname]
+                fields[actionvaluestring] = request.form[actionvaluestring]
+        numactions = 1
+
         inputdata['numfields'] = numfields
         inputdata['fields'] = json.dumps(fields)
         # application.logger.debug('INPUTDATA' + json.dumps(inputdata))
@@ -121,7 +131,8 @@ def increment(ename):
             uuid=uuid
         )
         oldval = int(entityinstancetoincrement[fieldname])
-        newval = oldval + 1
+        valtoincrement = request.form['incrementvalue']
+        newval = oldval + int(valtoincrement)
         entityinstancetoincrement[fieldname] = newval
         entityinstancetoincrement.save()
         # return ('', 204)
@@ -165,7 +176,23 @@ def seemylist(ename):
                 newentity['fields'][fieldname] = (fieldvalue, fieldconversiondict[fieldtype], entitychildname)
             if key == 'uuid':
                 newentity['uuid'] = value
-        application.logger.debug('NEWENT' + json.dumps(newentity))
+        for field in fields:
+            application.logger.debug(field)
+            if field[0:10] == 'actionname':
+                application.logger.debug('ACTIONfield: ' + field)
+                actionname = fields[field]
+                application.logger.debug('ACTIONname: ' + actionname)
+                actionnumber = field[10:].split('-')[1]
+                fieldnumber = field[10:].split('-')[0]
+                actionqualifier = fields['actionqualifier' + str(actionnumber) + '-1']
+                if actionname == 'add':
+                    application.logger.debug('WOOADD!');
+                    buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Add!</button> </form>'
+                    newentity['fields']['actionname'] = (Markup(buttontext), '', None)
+                if actionname == 'subtract':
+                    application.logger.debug('WOOADD!');
+                    buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="-' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Subtract!</button> </form>'
+                    newentity['fields']['actionname'] = (Markup(buttontext), '', None)
         outputentitylist.append(newentity)
     application.logger.debug(outputentitylist)
 
