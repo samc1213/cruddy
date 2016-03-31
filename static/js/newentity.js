@@ -11,7 +11,7 @@ $(document).ready(function() {
   addnewfield();
 });
 
-actionsavailable = {'int':['add', 'subtract'], 'float':null, 'string':null, 'entity':null}
+actionsavailable = {'int':['add', 'subtract'], 'float':null, 'string':null, 'entity':null, 'file':null}
 actionprettytext = {'add': 'Add', 'subtract':'Subtract'}
 
 function toggleaction() {
@@ -83,6 +83,7 @@ function makenewinputformgroup(formgroupnumber) {
     <option value="int">Whole Number</option> \
     <option value="float">Decimal Number</option> \
     <option value="entity">Child Entity</option> \
+    <option value="file">File</option> \
     </select> \
     <a class="actiontoggle" arrowdirection="right">Actions &#9658</a>\
     <div class="actionarea" style="display:none;">actionsactions \

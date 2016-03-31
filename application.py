@@ -7,16 +7,21 @@ from boto.dynamodb2 import connect_to_region
 from boto.dynamodb2.items import Item
 from boto.dynamodb2.fields import HashKey
 from boto.dynamodb2.table import Table
+import boto
 import uuid
 import json
+import os
 # from forms import RegistrationForm
 DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'default'
+UPLOAD_FOLDER = 'uploads'
 
 application = Flask(__name__)
 application.config.from_object(__name__)
+
+application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 conn = DynamoDBConnection(
             region=RegionInfo(name='us-west-2',
@@ -25,8 +30,15 @@ conn = DynamoDBConnection(
 # application.logger.debug(conn.list_tables())
 entities = Table('entities', connection=conn)
 
-fieldconversiondict = {'int': 'Whole Number', 'string': 'Text', 'entity': 'Child Entity', 'float':'Decimal Number'}
+fieldconversiondict = {'int': 'Whole Number', 'string': 'Text', 'entity': 'Child Entity', 'float':'Decimal Number', 'file': 'File'}
 
+
+s3conn = boto.connect_s3()
+# s3conn.create_bucket('cruddybucket')
+bucket = s3conn.get_bucket('cruddybucket')
+# k = boto.s3.key.Key(bucket)
+# k.key = 'boofar'
+# k.set_contents_from_string('this is a test')
 # application.logger.debug(entities.get_item(entityname='peepee'))
 # conn.get_table('entities')
 # don't do this in production - use from_envvar
@@ -58,20 +70,22 @@ def form():
             if entitychildname:
                 fields[entitychildstring] = entitychildname
             # PLAEHOLDER - WILL EVENTUALLY STORE NUMACTIONS IN form
-            numactions = 1
-            for actionnumber in range(1, numactions + 1):
-                actionname = 'actionname' + str(fieldnumber) + '-' + str(actionnumber)
-                actionvaluestring = 'actionqualifier' + str(fieldnumber) + '-' + str(actionnumber)
-                fields[actionname] = request.form[actionname]
-                fields[actionvaluestring] = request.form[actionvaluestring]
+            if fields[typestring] == 'int':
+                numactions = 1
+                for actionnumber in range(1, numactions + 1):
+                    actionname = 'actionname' + str(fieldnumber) + '-' + str(actionnumber)
+                    actionvaluestring = 'actionqualifier' + str(fieldnumber) + '-' + str(actionnumber)
+                    fields[actionname] = request.form[actionname]
+                    fields[actionvaluestring] = request.form[actionvaluestring]
         numactions = 1
 
         inputdata['numfields'] = numfields
         inputdata['fields'] = json.dumps(fields)
-        # application.logger.debug('INPUTDATA' + json.dumps(inputdata))
+        application.logger.debug('INPUTDATA' + json.dumps(inputdata))
         entities.put_item(data=inputdata)
         Table.create(entityname, schema=[HashKey('uuid')], connection=conn)
         return redirect(url_for('seemyform', ename=entityname))
+        # return 'ok'
     return render_template('newentityform.html', form=form, action='/form')
 
 @application.route('/seemyform/<ename>', methods=['GET', 'POST'])
@@ -111,7 +125,14 @@ def seemyform(ename):
         inputdata = {'uuid':str(uuid.uuid4())}
         for fieldnumber in range(1, numfields + 1):
             fieldstring = 'fieldname' + str(fieldnumber)
-            inputdata[fieldstring] = request.form[fieldstring]
+            fieldtype = fields['fieldtype' + str(fieldnumber)]
+            if fieldtype == 'file':
+                file = request.files[fieldstring]
+                if file:
+                    filename = file.filename
+                    file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+            else:
+                inputdata[fieldstring] = request.form[fieldstring]
         curentity = Table(ename, connection=conn)
         curentity.put_item(data = inputdata)
         return redirect(url_for('seemylist', ename=ename))
