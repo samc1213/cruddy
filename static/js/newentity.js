@@ -6,8 +6,24 @@ $(document).ready(function() {
   $numfieldsinput = $('#numfieldsinput');
   $newfieldbtn.click(addnewfield);
   $form.on('change', '.fieldtype', fieldchange);
+  $form.on('click', '.actiontoggle', toggleaction);
   addnewfield();
 });
+
+function toggleaction() {
+  console.log('toggle');
+  $actionarea = $(this).siblings('.actionarea');
+  if ($(this).attr('arrowdirection') == 'right') {
+    console.log('totheright');
+    $(this).attr('arrowdirection', 'down');
+    $(this).html('Actions &#9660');
+  }
+  else {
+    $(this).attr('arrowdirection', 'right');
+    $(this).html('Actions &#9658');
+  }
+  $actionarea.toggle();
+}
 
 function fieldchange() {
   console.log($(this).attr('number'));
@@ -46,6 +62,9 @@ function makenewinputformgroup(formgroupnumber) {
     <option value="float">Decimal Number</option> \
     <option value="entity">Child Entity</option> \
     </select> \
+    <a class="actiontoggle" arrowdirection="right">Actions &#9658</a>\
+    <div class="actionarea" style="display:none;">actionsactions \
+    </div> \
   </div>';
 }
 
