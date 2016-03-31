@@ -233,6 +233,16 @@ def seemylist(ename):
     # return render_template('form.html', form=form, action=acc)
     return render_template('list.html', entitylist=outputentitylist, entityname=ename, action=acc)
 
+@application.route('/gridmessin/<ename>', methods=['GET'])
+def gridmessin(ename):
+    curentity = entities.get_item(entityname=ename)
+    fields = json.loads(curentity['fields'])
+    goodfields = {}
+    for fieldnamenumber, fieldname in fields.iteritems():
+        if fieldnamenumber[0:9] !="fieldtype":
+            goodfields[fieldnamenumber] = fieldname
+    return render_template('gridmessin.html', fields=goodfields)
+
 @application.route('/seemytable/<ename>', methods=['GET'])
 def seemytable(ename):
     entitytable = Table(ename, connection=conn)

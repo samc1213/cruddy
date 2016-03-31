@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}New Entity{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/grid.css')}}" />
+{% endblock %}
+{% block content %}
+<div>
+{{fields}}
+</div>
+<div id="sidebar">
+  {% for fieldnamenumber, fieldname in fields.iteritems() recursive %}
+  <div style="color: white;">{{fieldname}}</div>
+  {% endfor %}
+</div>
+<div id="rightstuff">
+  <div class="gridster">
+    <ul>
+      <li data-row="1" data-col="1" data-sizex="6" data-sizey="1"></li>
+
+      <!-- <li data-row="1" data-col="2" data-sizex="2" data-sizey="1"></li>
+      <li data-row="2" data-col="2" data-sizex="2" data-sizey="2"></li>
+
+      <li data-row="1" data-col="4" data-sizex="1" data-sizey="1"></li>
+      <li data-row="2" data-col="4" data-sizex="2" data-sizey="1"></li>
+      <li data-row="3" data-col="4" data-sizex="1" data-sizey="1"></li>
+
+      <li data-row="1" data-col="5" data-sizex="1" data-sizey="1"></li>
+      <li data-row="3" data-col="5" data-sizex="1" data-sizey="1"></li>
+
+      <li data-row="1" data-col="6" data-sizex="1" data-sizey="1"></li>
+      <li data-row="2" data-col="6" data-sizex="1" data-sizey="2"></li> -->
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script type = "text/javascript" src="{{url_for('static', filename='js/grid.js')}}"></script>
+{{super()}}
+{% endblock %}
