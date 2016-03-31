@@ -17,6 +17,7 @@ SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'default'
 UPLOAD_FOLDER = 'uploads'
+BUCKET_NAME = 'cruddybucket'
 
 application = Flask(__name__)
 application.config.from_object(__name__)
@@ -35,7 +36,7 @@ fieldconversiondict = {'int': 'Whole Number', 'string': 'Text', 'entity': 'Child
 
 s3conn = boto.connect_s3()
 # s3conn.create_bucket('cruddybucket')
-bucket = s3conn.get_bucket('cruddybucket')
+bucket = s3conn.get_bucket(BUCKET_NAME)
 # k = boto.s3.key.Key(bucket)
 # k.key = 'boofar'
 # k.set_contents_from_string('this is a test')
@@ -135,6 +136,9 @@ def seemyform(ename):
                     k = boto.s3.key.Key(bucket)
                     k.key = ename + '/' + filename
                     k.set_contents_from_filename(localfilename)
+                    k.make_public()
+                    os.remove(localfilename)
+                    inputdata[fieldstring] = filename
             else:
                 inputdata[fieldstring] = request.form[fieldstring]
         curentity = Table(ename, connection=conn)
@@ -194,6 +198,11 @@ def seemylist(ename):
                         if childfield != 'uuid':
                             fieldvalue += '<b>' + childfieldnames[childfield]+ '</b> ' + childvalue + '<br>'
                     fieldvalue = Markup(fieldvalue)
+                if fieldtype == 'file':
+                    s3link = 'https://s3.amazonaws.com/' + BUCKET_NAME + '/' + ename + '/' + d[key]
+                    fieldvalue = Markup('<a href="' + s3link + '" download>Download</a>')
+                    entitychildname = None
+                    entitychildinfo = None
                 else:
                     entitychildname = None
                     entitychildinfo = None
