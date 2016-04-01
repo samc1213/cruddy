@@ -1,12 +1,18 @@
 li {
   border: 3px solid black;
 }
+
+ul {
+list-style-type: none;
+}
+
 html, body {
   height: 100%;
 }
 #rightstuff {
   width: 80%;
   overflow: hidden;
+  /*margin-right: 5%;*/
 }
 
 #sidebar {

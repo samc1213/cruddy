@@ -239,9 +239,14 @@ def gridmessin(ename):
     fields = json.loads(curentity['fields'])
     goodfields = {}
     for fieldnamenumber, fieldname in fields.iteritems():
-        if fieldnamenumber[0:9] !="fieldtype":
+        if fieldnamenumber[0:9] =="fieldname":
             goodfields[fieldnamenumber] = fieldname
     return render_template('gridmessin.html', fields=goodfields)
+
+@application.route('/viewgrid/<ename>', methods=['GET'])
+def viewgrid(ename):
+    curentity = entities.get_item(entityname=ename)
+    return render_template('viewgrid.html')
 
 @application.route('/seemytable/<ename>', methods=['GET'])
 def seemytable(ename):

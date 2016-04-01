@@ -1,5 +1,5 @@
 $(document).ready( function() {
-  gridwidth = $('.gridster').width();
+  gridwidth = $('.gridster').width()*0.9;
   console.log(gridwidth);
   numcols = 6;
   count = 0;
@@ -10,6 +10,7 @@ $(document).ready( function() {
       max_cols: numcols,
       min_cols: numcols,
       resize: {enabled: true},
+      serialize_params: function($w, wgd) { return { col: wgd.col, row: wgd.row, size_x: wgd.size_x, size_y: wgd.size_y, name:$w.text()} }
   }).data('gridster');
   // gridster.add_widget()
   console.log($('.sidebar').children());
@@ -17,13 +18,13 @@ $(document).ready( function() {
     console.log($(this).attr('id'));
     if ($(this).attr('id') != ""){
       $(this).click(function(){
-          gridsteryo.add_widget('<li>'+$(this).attr('id').substr(2)+'</li>', 6, 2);
+          gridsteryo.add_widget('<li>'+$(this).attr('id').substr(3)+'</li>', 6, 2);
       });
     }
     //fix this shit
     if (count ==0 && $(this).attr('id') != ""){
       $(this).attr('id')
-      gridsteryo.add_widget('<li>'+$(this).attr('id').substr(2)+'</li>', 6, 2);
+      gridsteryo.add_widget('<li>'+$(this).attr('id').substr(3)+'</li>', 6, 2);
       count ++;
       }
   });
@@ -74,4 +75,10 @@ function addnewfield() {
   numfields += 1;
   $lastformgroup.after(makenewinputformgroup(numfields));
   $numfieldsinput.val(numfields);
+}
+
+function savegrid() {
+  var gridster = $(".gridster ul").gridster().data('gridster');
+
+  console.log(JSON.stringify(gridster.serialize()));
 }
