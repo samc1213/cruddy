@@ -9,6 +9,7 @@ $(document).ready( function() {
       widget_base_dimensions: [colwidth, 15],
       max_cols: numcols,
       min_cols: numcols,
+      resize: {enabled: true},
   }).data('gridster');
   // gridster.add_widget()
   console.log($('.sidebar').children());
@@ -25,9 +26,6 @@ $(document).ready( function() {
       gridsteryo.add_widget('<li>'+$(this).attr('id').substr(2)+'</li>', 6, 2);
       count ++;
       }
-
-
-    
   });
 });
 
@@ -35,11 +33,6 @@ $(document).ready( function() {
 //   console.log('addingnewli');
 //   gridsteryo.add_widget('<li>'+val+'</li>', 6, 2);
 // }
-
-
-
-
-
       // var gridster;
 
       // // same object than generated with gridster.serialize() method
