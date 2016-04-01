@@ -7,15 +7,15 @@
 <div>
 {{fields}}
 </div>
-<div id="sidebar">
+<div id="sidebar" class = "sidebar">
   {% for fieldnamenumber, fieldname in fields.iteritems() recursive %}
-  <div style="color: white;">{{fieldname}}</div>
+  <button type="button" id="btn{{fieldname}}" class="btn btn-default">{{fieldname}}</button>
   {% endfor %}
 </div>
 <div id="rightstuff">
   <div class="gridster">
     <ul>
-      <li data-row="1" data-col="1" data-sizex="6" data-sizey="1"></li>
+      <!-- <li data-row="1" data-col="1" data-sizex="6" data-sizey="1"></li> -->
 
       <!-- <li data-row="1" data-col="2" data-sizex="2" data-sizey="1"></li>
       <li data-row="2" data-col="2" data-sizex="2" data-sizey="2"></li>
