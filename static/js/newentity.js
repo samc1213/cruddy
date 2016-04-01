@@ -7,13 +7,26 @@ $(document).ready(function() {
   $newfieldbtn.click(addnewfield);
   $form.on('change', '.fieldtype', fieldchange);
   $form.on('DOMNodeInserted', '.fieldtype', fieldchange);
+  $form.on('change', '.actionname', actionchange)
   $form.on('click', '.actiontoggle', toggleaction);
   addnewfield();
 });
 
-actionsavailable = {'int':['add', 'subtract'], 'float':null, 'string':null, 'entity':null, 'file':null}
-actionprettytext = {'add': 'Add', 'subtract':'Subtract'}
+actionsavailable = {'int':['add', 'subtract'], 'float':null, 'string':null, 'entity':null, 'file':null, 'phone':['textmsg']}
+actionprettytext = {'add': 'Add', 'subtract':'Subtract', 'textmsg':'Text Message'}
+actionqualifiertexts = {'add': 'Amount to Add', 'subtract': 'Amount to Subtract', 'textmsg':'Message To Send'}
+actioninputtypes = {'add': 'number', 'subtract': 'number', 'textmsg': 'text'}
 
+function actionchange() {
+  formgroupnumber = $(this).attr('number');
+  var actionnamestring = '#actionname' + formgroupnumber + '-1';
+  console.log('anameSTRINg' + actionnamestring)
+  selectedaction = $(actionnamestring).val();
+  console.log('saction' + selectedaction);
+  var valueselectortext = '<label>' + actionqualifiertexts[selectedaction] + '</label><input name="actionqualifier' + formgroupnumber + '-1" class="form-control" type="' + actioninputtypes[selectedaction] + '"/>';
+  $actionarea.find('.actionname').nextAll().remove();
+  $actionarea.find('.actionname').after(valueselectortext);
+}
 function toggleaction() {
   console.log('toggle');
   $actionarea = $(this).siblings('.actionarea');
@@ -41,14 +54,17 @@ function fieldchange() {
     $actionarea.text('There are no actions available for this field type.');
   }
   else {
-    var actionselectortext = '<label>Action</label><select class="form-control actionname" name="actionname' + formgroupnumber + '-1">';
+    var actionselectortext = '<label>Action</label><select class="form-control actionname" name="actionname' + formgroupnumber + '-1" id="actionname' + formgroupnumber + '-1" number = "' + formgroupnumber + '">';
     for (i = 0; i < actionsavailablelist.length; i++) {
-      actionselectortext += '<option value="' + actionsavailablelist[i] + '">' + actionprettytext[actionsavailablelist[i]] + '</option>';
+      actionselectortext += '<option number="' + formgroupnumber + '" value="' + actionsavailablelist[i] + '">' + actionprettytext[actionsavailablelist[i]] + '</option>';
     }
     actionselectortext += '</select>';
-    var valueselectortext = '<label>Value</label><input name="actionqualifier' + formgroupnumber + '-1" class="form-control" type="number"/>';
-    actionselectortext += valueselectortext
     $actionarea.html(actionselectortext);
+    var actionnamestring = '#actionname' + formgroupnumber + '-1';
+    selectedaction = $(actionnamestring).val();
+    var valueselectortext = '<label>' + actionqualifiertexts[selectedaction] + '</label><input name="actionqualifier' + formgroupnumber + '-1" class="form-control" type="' +  actioninputtypes[selectedaction] + '"/>';
+    $actionarea.find('.actionname').after(valueselectortext);
+
   }
   if ($(this).val() == 'entity') {
     var childentitynamefield = '<label class="entitychildnamelabel" for="entitychildname' + formgroupnumber + '">Entity Child Name:</label> \
@@ -84,6 +100,7 @@ function makenewinputformgroup(formgroupnumber) {
     <option value="float">Decimal Number</option> \
     <option value="entity">Child Entity</option> \
     <option value="file">File</option> \
+    <option value="phone">Phone Number</option> \
     </select> \
     <a class="actiontoggle" arrowdirection="right">Actions &#9658</a>\
     <div class="actionarea" style="display:none;">actionsactions \
