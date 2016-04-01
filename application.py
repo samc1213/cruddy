@@ -252,6 +252,9 @@ def viewgrid(ename):
 def savegrid(ename):
     gridjson = request.form['gridjson']
     application.logger.debug(gridjson + "ENAEM" + ename)
+    entity = entities.get_item(entityname = ename)
+    entity['gridjson'] = gridjson
+    entity.save()
     return 'OK'
 
 @application.route('/seemytable/<ename>', methods=['GET'])
