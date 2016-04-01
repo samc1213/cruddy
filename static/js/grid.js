@@ -79,6 +79,10 @@ function addnewfield() {
 
 function savegrid() {
   var gridster = $(".gridster ul").gridster().data('gridster');
-
-  console.log(JSON.stringify(gridster.serialize()));
+  var gridjson = JSON.stringify(gridster.serialize());
+  var url =window.location.href;
+  var urlsplitarr = url.split('/');
+  var ename = urlsplitarr[urlsplitarr.length - 1]
+  $.post( "/savegrid/" + ename, { gridjson: gridjson } );
+  console.log();
 }

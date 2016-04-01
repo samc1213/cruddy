@@ -248,6 +248,12 @@ def viewgrid(ename):
     curentity = entities.get_item(entityname=ename)
     return render_template('viewgrid.html')
 
+@application.route('/savegrid/<ename>', methods=['POST'])
+def savegrid(ename):
+    gridjson = request.form['gridjson']
+    application.logger.debug(gridjson + "ENAEM" + ename)
+    return 'OK'
+
 @application.route('/seemytable/<ename>', methods=['GET'])
 def seemytable(ename):
     entitytable = Table(ename, connection=conn)
