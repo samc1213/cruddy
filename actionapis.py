@@ -58,18 +58,12 @@ def editendpoint():
     return entityinstance['fieldname' + fieldnumber]
 
 
-def runactions(newentity, actionname, acc, fieldnumber, actionqualifier, fieldvalue):
+def runactions(actionname, acc, fieldnumber, actionqualifier, uuid):
     if actionname == 'add':
         # application.logger.debug('WOOADD!');
-        buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name ="actionname" value = "'+ actionname+'" > <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Add!</button> </form>'
-        newentity['fields']['actionname'] = (Markup(buttontext), '', None)
+        buttontext =   '<form style="height:100%; width:100%;" action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + uuid + '"> <input type="hidden" name ="actionname" value = "'+ actionname+'" > <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="' + actionqualifier +'"> <button type="submit" class = "btn btn-default" style="height:100%; width:100%;"> Add!</button> </form>'
+        return Markup(buttontext)
     if actionname == 'subtract':
         # application.logger.debug('WOOADD!');
-        buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name ="actionname" value = "'+ actionname+'" > <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="-' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Subtract!</button> </form>'
-        newentity['fields']['actionname'] = (Markup(buttontext), '', None)
-    if actionname =='edit':
-        newentity['fields']['actionname'] = ('hi', '', None)
-# <span type="hidden" fieldtoaffect=""
-
-
-    return newentity
+        buttontext =   '<form style="height:100%; width:100%;" action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + uuid + '"> <input type="hidden" name ="actionname" value = "'+ actionname+'" > <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="-' + actionqualifier +'"> <button type="submit" class = "btn btn-default" style="height:100%; width:100%;"> Subtract!</button> </form>'
+        return Markup(buttontext)
