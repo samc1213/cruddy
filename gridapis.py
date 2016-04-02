@@ -11,6 +11,8 @@ import boto
 import uuid
 import json
 import os
+import simplejson
+
 
 grids_api = Blueprint('grids_api', __name__)
 
@@ -26,6 +28,7 @@ gridheight = 15 # pixels
 @grids_api.route('/viewgrid/<ename>', methods=['GET'])
 def viewgrid(ename):
     curentity = entities.get_item(entityname=ename)
+    curentityjson = simplejson.dumps(dict(curentity))
     gridjson = curentity['gridjson']
     gridinfo = json.loads(gridjson)
     entitytable = Table(ename, connection=conn)
@@ -52,7 +55,8 @@ def viewgrid(ename):
             newbox['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
             fieldnamenum = box['fieldnamenumber']
             newbox['value'] = d[fieldnamenum]
+            newbox['fieldnum'] = fieldnamenum[9:]
             displaylist.append(newbox)
-        displaylists.append(displaylist)
+        displaylists.append({'fieldinfo': displaylist, 'uuid': d['uuid']})
     test = 'hi'
-    return render_template('viewgrid.html', gridjson = gridjson, displaylists = displaylists, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows, gridinfo = gridinfo)
+    return render_template('viewgrid.html', gridjson = gridjson, displaylists = displaylists, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows, gridinfo = gridinfo, curentityjson=curentityjson)
