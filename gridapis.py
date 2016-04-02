@@ -68,7 +68,8 @@ def viewgrid(ename):
                 newbox['value'] = childentitytable.get_item(uuid = d[fieldna])[fieldnamenum.split('-')[1]]
                 # newbox['value'] = d[fieldnamenum.split('-')[1]]
                 # newbox['value'] = d[fieldna]
-                newbox['fieldnum'] = fieldnamenum[9:]
+                newbox['fieldnum'] = fieldnamenum.split('-')[1][9:]
+                newbox['entityname'] = fieldnamenum.split('-')[0]
                 displaylist.append(newbox)
             elif fieldnamenum[0:10] != 'actionname':
                 # this means its a fieldname
@@ -85,6 +86,7 @@ def viewgrid(ename):
                 else:
                     newbox['value'] = d[fieldnamenum]
                 newbox['fieldnum'] = fieldnum
+                newbox['entityname'] = ename
                 displaylist.append(newbox)
             else:
                 newbox['widthpercentage'] = (1/6.0) * box['size_x'] * 100
@@ -94,14 +96,28 @@ def viewgrid(ename):
                 btntext = runactions(fieldinfo[fieldnamenum], '/doaction/' + ename, fieldnamenum[10:].split('-')[0], fieldinfo['actionqualifier' + fieldnamenum[10:]], d['uuid'])
                 newbox['value'] = btntext
                 newbox['fieldnum'] = fieldnamenum[10:]
+                newbox['entityname'] = ename
                 displaylist.append(newbox)
         displaylists.append({'fieldinfo': displaylist, 'uuid': d['uuid']})
     optionslist = []
-    for fname, val in fieldinfo.iteritems():
-        newoption = {}
-        if fname[0:9] == 'fieldname':
-            newoption['val'] = fname
-            newoption['text'] = val
+    for box in gridinfo:
+        if box['fieldnamenumber'][0:6] != 'action':
+            newoption = {}
+            newoption['val'] = box['fieldnamenumber']
+            newoption['text'] = box['name']
+    #     newoption = {}
+    #     if fname[0:9] == 'fieldname':
+    #         fieldtype = fieldinfo['fieldtype' + fname[9:]]
+    #         if fieldtype != 'entity':
+    #             newoption['val'] = fname
+    #             newoption['text'] = val
+    #             optionslist.append(newoption)
+    #         else:
+    #             entitychildname = fieldinfo['entitychildname' + fname[9:]]
+    #             newoption['val'] = fname
+    #             newoption['text'] = entitychildname
             optionslist.append(newoption)
+                # iitsan entity
+
     test = 'hi'
     return render_template('viewgrid.html', gridjson = gridjson, displaylists = displaylists, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows, gridinfo = gridinfo, curentityjson=curentityjson, optionslist=optionslist)

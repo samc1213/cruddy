@@ -1,6 +1,7 @@
 $(document).ready(function() {
   $searchinput = $('#searchinput');
   $searchinput.keyup(search);
+  $('#fieldtosearchon').change(search);
   $.editable.addInputType('autogrow', {
     element: function(settings, original){
       var textarea = $('<textarea>');
@@ -47,9 +48,11 @@ $(document).ready(function() {
 });
 
 function search() {
-  var searchterm = $(this).val();
+  var searchterm = $searchinput.val();
+  fieldtosearchon = $('#fieldtosearchon').val();
+  if (fieldtosearchon == 'All') {
   $(document).find('.entityinstancebox').each( function() {
-    var hidethisguy = true;
+    hidethisguy = true;
     $(this).find('.fielddiv').each( function() {
       if ($(this).text().indexOf(searchterm) > -1) {
         hidethisguy = false;
@@ -57,14 +60,38 @@ function search() {
       }
     });
     if (hidethisguy == true) {
-      console.log('HIDE!');
-      // $(this).addClass('hideboy');
-      $(this).css('display', 'none');
-    }
-    else {
-      console.log('KEEP!');
-      $(this).css('display', 'block');
-    }
-  });
+        console.log('HIDE!');
+        // $(this).addClass('hideboy');
+        $(this).css('display', 'none');
+      }
+      else {
+        console.log('KEEP!');
+        $(this).css('display', 'block');
+      }
+    });
+  }
+  else {
+    console.log('notall');
+    $(document).find('.entityinstancebox').each( function() {
+      hidethisguy = true;
+      var fieldnumbertosearchon = fieldtosearchon.substr(9);
+      $(this).find('.fielddiv[fieldnum="' + fieldnumbertosearchon + '"]').each( function() {
+        if ($(this).text().indexOf(searchterm) > -1) {
+          hidethisguy = false;
+          console.log($(this).text());
+        }
+      });
+      if (hidethisguy == true) {
+          console.log('HIDE!');
+          // $(this).addClass('hideboy');
+          $(this).css('display', 'none');
+        }
+        else {
+          console.log('KEEP!');
+          $(this).css('display', 'block');
+        }
+    });
+
+  }
 
 }
