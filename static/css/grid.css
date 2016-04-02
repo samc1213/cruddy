@@ -25,3 +25,12 @@ html, body {
   padding: 10px;
   border: 5px solid red;
 }
+
+/*form{
+  height: 100%;
+  width: 100%;
+}
+*/
+input{
+  word-wrap: break-word;
+}
