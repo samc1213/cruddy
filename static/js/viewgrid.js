@@ -1,4 +1,16 @@
 $(document).ready(function() {
+  $.editable.addInputType('autogrow', {
+    element: function(settings, original){
+      var textarea = $('<textarea>');
+      textarea.height("100%");
+      textarea.width("100%");
+      $(this).append(textarea);
+      return(textarea);
+    },
+    plugin : function(){
+      $('textarea', this).autogrow(settings, original);
+    }
+  });
   curentityjson = $('#curentityjson').text();
   curentityinfo = JSON.parse(curentityjson);
   fieldinfo = JSON.parse(curentityinfo['fields']);
@@ -9,6 +21,8 @@ $(document).ready(function() {
     $(this).find('div').each( function() {
       if (fieldinfo['actionname' + $(this).attr('fieldnum') + '-1'] == 'edit') {
         $(this).editable('/editendpoint', {
+          type : "autogrow",
+          tooltip: "Double click to Edit",
           event : "dblclick",
           submitdata : {uuid: $(this).closest('.entityinstancebox').attr('uuid'),
         fieldnumber: $(this).attr('fieldnum'),
@@ -18,6 +32,7 @@ $(document).ready(function() {
     });
 
   });
+
   console.log(curentityjson);
   $('.editform').on('submit', function(event){
 
