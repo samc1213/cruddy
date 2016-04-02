@@ -3,17 +3,19 @@
 {% endblock %}
 {% block title %}View Grid{% endblock %}
 {% block content %}
+<div>
 {{gridjson}}
 {% for d in displaylist %}
 {{d}}
 {% endfor %}
-<div class="col-md-3">
 </div>
-<div class="col-md-6" style="border: 3px solid black; height: 10px;">
-  <div style="display: inline-block; height: 50px; border: 3px solid black;" class="col-md-2">
+<div id="wrapper" style="text-align: center;">
+  <div style="display: inline-block; border: 3px solid black; height: 10px; width: 50%;">
+    <div style="display: inline-block; height: 50px; width: 30%; border: 3px solid black; top: 50px;">
+    </div>
+    <div style="display: inline-block; height: 50px; width: 10%; border: 3px solid black;">
+    </div>
   </div>
-</div>
-<div class="col-md-3">
 </div>
 
 {% endblock %}

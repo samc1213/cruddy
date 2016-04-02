@@ -11,6 +11,7 @@ import boto
 import uuid
 import json
 import os
+from gridapis import grids_api
 # from forms import RegistrationForm
 DEBUG = True
 SECRET_KEY = 'development key'
@@ -21,7 +22,7 @@ BUCKET_NAME = 'cruddybucket'
 
 application = Flask(__name__)
 application.config.from_object(__name__)
-
+application.register_blueprint(grids_api)
 application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 conn = DynamoDBConnection(
@@ -243,18 +244,6 @@ def gridmessin(ename):
             goodfields[fieldnamenumber] = fieldname
     return render_template('gridmessin.html', fields=goodfields)
 
-@application.route('/viewgrid/<ename>', methods=['GET'])
-def viewgrid(ename):
-    curentity = entities.get_item(entityname=ename)
-    gridjson = curentity['gridjson']
-    gridinfo = json.loads(gridjson)
-    rownumbers = [gridbox['row'] for gridbox in gridinfo]
-    numrows = max(rownumbers)
-    displaylist = []
-    for rownumber in range(1, numrows + 1):
-        rowboxes = [gridbox for gridbox in gridinfo if gridbox['row'] == rownumber]
-        displaylist.append(rowboxes)
-    return render_template('viewgrid.html', gridjson = gridjson, displaylist = displaylist)
 
 @application.route('/savegrid/<ename>', methods=['POST'])
 def savegrid(ename):
