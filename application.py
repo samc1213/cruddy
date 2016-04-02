@@ -118,7 +118,7 @@ def seemyform(ename):
             for curdict in dictlist:
                 entitychildtext = ""
                 for key, val in curdict.iteritems():
-                    if key != "uuid":
+                    if key != "uuid" and key != "creationdate":
                         entitychildtext += (str(childfieldnames[key]) + " | " + str(val))
                     else:
                         curuuid = val
@@ -151,7 +151,7 @@ def seemyform(ename):
         curentity = Table(ename, connection=conn)
         inputdata['creationdate'] = str(datetime.datetime.utcnow())
         curentity.put_item(data = inputdata)
-        return redirect(url_for('seemylist', ename=ename))
+        return redirect(url_for('gridmessin', ename=ename))
     return render_template('entityinstanceform.html', form=form, action=acc, entityname=ename)
 
 
