@@ -30,8 +30,14 @@ def viewgrid(ename):
     gridinfo = json.loads(gridjson)
     entitytable = Table(ename, connection=conn)
     dictlist = [dict(inst) for inst in entitytable.scan()]
-    # rownumbers = [gridbox['row'] for gridbox in gridinfo]
-    # numrows = max(rownumbers)
+    rownumbers = [gridbox['row'] for gridbox in gridinfo]
+    numrows = max(rownumbers)
+    eboxheight = 0
+    for gb in gridinfo:
+        if gb['row'] == numrows:
+            neweboxheight = numrows * gridheight + (gb['size_y']-1) * gridheight
+            if neweboxheight > eboxheight:
+                eboxheight = neweboxheight
     displaylist = []
     # for rownumber in range(1, numrows + 1):
     #     rowboxes = [gridbox for gridbox in gridinfo if gridbox['row'] == rownumber]
@@ -43,4 +49,4 @@ def viewgrid(ename):
         box['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
         displaylist.append(box)
     test = 'hi'
-    return render_template('viewgrid.html', gridjson = gridjson, displaylist = displaylist, dictlist = dictlist)
+    return render_template('viewgrid.html', gridjson = gridjson, displaylist = displaylist, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows)
