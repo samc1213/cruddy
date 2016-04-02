@@ -85,11 +85,11 @@ function fieldchange() {
     $actionarea.html(actionselectortext);
     var actionnamestring = '#actionname' + formgroupnumber + '-1';
     selectedaction = $(actionnamestring).val();
-    if (actionqualifiertexts[selectedaction] != null){
+    // if (actionqualifiertexts[selectedaction] != null){
       var valueselectortext = '<label>' + actionqualifiertexts[selectedaction] + '</label><input name="actionqualifier' + formgroupnumber + '-1" class="form-control" type="' +  actioninputtypes[selectedaction] + '"/>';
       $actionarea.find('.actionname').after(valueselectortext);
 
-    }
+    // }
 
   }
   if ($(this).val() == 'entity') {
