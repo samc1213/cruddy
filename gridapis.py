@@ -38,15 +38,21 @@ def viewgrid(ename):
             neweboxheight = numrows * gridheight + (gb['size_y']-1) * gridheight
             if neweboxheight > eboxheight:
                 eboxheight = neweboxheight
-    displaylist = []
     # for rownumber in range(1, numrows + 1):
     #     rowboxes = [gridbox for gridbox in gridinfo if gridbox['row'] == rownumber]
     #     displaylist.append(rowboxes)
-    for box in gridinfo:
-        box['widthpercentage'] = (1/6.0) * box['size_x'] * 100
-        box['heightinpx'] = gridheight * box['size_y']
-        box['topamountpx'] = (box['row'] - 1) * gridheight
-        box['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
-        displaylist.append(box)
+    displaylists = []
+    for d in dictlist:
+        displaylist = []
+        for box in gridinfo:
+            newbox = {}
+            newbox['widthpercentage'] = (1/6.0) * box['size_x'] * 100
+            newbox['heightinpx'] = gridheight * box['size_y']
+            newbox['topamountpx'] = (box['row'] - 1) * gridheight
+            newbox['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
+            fieldnamenum = box['fieldnamenumber']
+            newbox['value'] = d[fieldnamenum]
+            displaylist.append(newbox)
+        displaylists.append(displaylist)
     test = 'hi'
-    return render_template('viewgrid.html', gridjson = gridjson, displaylist = displaylist, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows)
+    return render_template('viewgrid.html', gridjson = gridjson, displaylists = displaylists, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows, gridinfo = gridinfo)

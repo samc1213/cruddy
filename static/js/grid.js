@@ -10,7 +10,7 @@ $(document).ready( function() {
       max_cols: numcols,
       min_cols: numcols,
       resize: {enabled: true},
-      serialize_params: function($w, wgd) { return { col: wgd.col, row: wgd.row, size_x: wgd.size_x, size_y: wgd.size_y, name:$w.text()} }
+      serialize_params: function($w, wgd) { return { col: wgd.col, row: wgd.row, size_x: wgd.size_x, size_y: wgd.size_y, name:$w.text(), fieldnamenumber:$w.attr('fieldnamenumber')} }
   }).data('gridster');
   // gridster.add_widget()
   console.log($('.sidebar').children());
@@ -18,13 +18,13 @@ $(document).ready( function() {
     console.log($(this).attr('id'));
     if ($(this).attr('id') != ""){
       $(this).click(function(){
-          gridsteryo.add_widget('<li>'+$(this).attr('id').substr(3)+'</li>', 6, 2);
+          gridsteryo.add_widget('<li fieldnamenumber="' + $(this).attr('fieldnamenumber') + '">'+$(this).attr('id').substr(3)+'</li>', 6, 2);
       });
     }
     //fix this shit
     if (count ==0 && $(this).attr('id') != ""){
       $(this).attr('id')
-      gridsteryo.add_widget('<li>'+$(this).attr('id').substr(3)+'</li>', 6, 2);
+      gridsteryo.add_widget('<li fieldnamenumber="' + $(this).attr('fieldnamenumber') + '">'+$(this).attr('id').substr(3)+'</li>', 6, 2);
       count ++;
       }
   });

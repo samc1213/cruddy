@@ -1,13 +1,9 @@
-{% extends "base.html" %}
-{% block title %}New Entity{% endblock %}
-{% block styles %}
-<link rel="stylesheet" href="{{url_for('static', filename='css/grid.css')}}" />
-{% endblock %}
-{% block content %}
-<div id="sidebar" class = "sidebar">
+{% extends "base.html" %} {% block title %}New Entity{% endblock %} {% block styles %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/grid.css')}}" /> {% endblock %} {% block content %}
+<div id="sidebar" class="sidebar">
   {% for fieldnamenumber, fieldname in fields.iteritems() recursive %}
-  <button type="button" id="btn{{fieldname}}" class="btn btn-default">{{fieldname}}</button><br>
-  {% endfor %}
+  <button type="button" id="btn{{fieldname}}" fieldnamenumber="{{fieldnamenumber}}" class="btn btn-default">{{fieldname}}</button>
+  <br> {% endfor %}
 </div>
 <div id="rightstuff">
   <div class="gridster">
@@ -32,9 +28,6 @@
 <div>
   <button onclick="savegrid()">save grid</button>
 </div>
-{% endblock %}
-
-{% block javascript %}
-<script type = "text/javascript" src="{{url_for('static', filename='js/grid.js')}}"></script>
-{{super()}}
-{% endblock %}
+{% endblock %} {% block javascript %}
+<script type="text/javascript" src="{{url_for('static', filename='js/grid.js')}}"></script>
+{{super()}} {% endblock %}
