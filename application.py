@@ -14,6 +14,7 @@ import os
 from gridapis import grids_api
 from actionapis import actions_api
 from actionapis import runactions
+import datetime
 
 # from forms import RegistrationForm
 DEBUG = True
@@ -148,6 +149,7 @@ def seemyform(ename):
             else:
                 inputdata[fieldstring] = request.form[fieldstring]
         curentity = Table(ename, connection=conn)
+        inputdata['creationdate'] = str(datetime.datetime.utcnow())
         curentity.put_item(data = inputdata)
         return redirect(url_for('seemylist', ename=ename))
     return render_template('entityinstanceform.html', form=form, action=acc, entityname=ename)

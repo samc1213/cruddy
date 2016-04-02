@@ -50,6 +50,7 @@ def viewgrid(ename):
     displaylists = []
     for d in dictlist:
         displaylist = []
+        creationdate = d['creationdate']
         for box in gridinfo:
             newbox = {}
             fieldnamenum = box['fieldnamenumber']
@@ -98,7 +99,7 @@ def viewgrid(ename):
                 newbox['fieldnum'] = fieldnamenum[10:]
                 newbox['entityname'] = ename
                 displaylist.append(newbox)
-        displaylists.append({'fieldinfo': displaylist, 'uuid': d['uuid']})
+        displaylists.append({'fieldinfo': displaylist, 'uuid': d['uuid'], 'creationdate': creationdate})
     optionslist = []
     for box in gridinfo:
         if box['fieldnamenumber'][0:6] != 'action':
@@ -121,6 +122,7 @@ def viewgrid(ename):
     #             newoption['text'] = entitychildname
             optionslist.append(newoption)
                 # iitsan entity
-
+    for d in range(len(displaylists)):
+        displaylists[d]['ordernumber'] = d
     test = 'hi'
     return render_template('viewgrid.html', gridjson = gridjson, displaylists = displaylists, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows, gridinfo = gridinfo, curentityjson=curentityjson, optionslist=optionslist)
