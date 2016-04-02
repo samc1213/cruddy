@@ -12,6 +12,7 @@ import uuid
 import json
 import os
 import simplejson
+from actionapis import runactions
 
 
 grids_api = Blueprint('grids_api', __name__)
@@ -29,6 +30,7 @@ gridheight = 15 # pixels
 def viewgrid(ename):
     curentity = entities.get_item(entityname=ename)
     curentityjson = simplejson.dumps(dict(curentity))
+    fieldinfo = json.loads(curentity['fields'])
     gridjson = curentity['gridjson']
     gridinfo = json.loads(gridjson)
     entitytable = Table(ename, connection=conn)
@@ -49,14 +51,25 @@ def viewgrid(ename):
         displaylist = []
         for box in gridinfo:
             newbox = {}
-            newbox['widthpercentage'] = (1/6.0) * box['size_x'] * 100
-            newbox['heightinpx'] = gridheight * box['size_y']
-            newbox['topamountpx'] = (box['row'] - 1) * gridheight
-            newbox['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
             fieldnamenum = box['fieldnamenumber']
-            newbox['value'] = d[fieldnamenum]
-            newbox['fieldnum'] = fieldnamenum[9:]
-            displaylist.append(newbox)
+            if fieldnamenum[0:10] != 'actionname':
+                newbox['widthpercentage'] = (1/6.0) * box['size_x'] * 100
+                newbox['heightinpx'] = gridheight * box['size_y']
+                newbox['topamountpx'] = (box['row'] - 1) * gridheight
+                newbox['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
+
+                newbox['value'] = d[fieldnamenum]
+                newbox['fieldnum'] = fieldnamenum[9:]
+                displaylist.append(newbox)
+            else:
+                newbox['widthpercentage'] = (1/6.0) * box['size_x'] * 100
+                newbox['heightinpx'] = gridheight * box['size_y']
+                newbox['topamountpx'] = (box['row'] - 1) * gridheight
+                newbox['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
+                btntext = runactions(fieldinfo[fieldnamenum], '/doaction/' + ename, fieldnamenum[10:].split('-')[0], fieldinfo['actionqualifier' + fieldnamenum[10:]], d['uuid'])
+                newbox['value'] = btntext
+                newbox['fieldnum'] = fieldnamenum[10:]
+                displaylist.append(newbox)
         displaylists.append({'fieldinfo': displaylist, 'uuid': d['uuid']})
     test = 'hi'
     return render_template('viewgrid.html', gridjson = gridjson, displaylists = displaylists, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows, gridinfo = gridinfo, curentityjson=curentityjson)

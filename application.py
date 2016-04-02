@@ -37,7 +37,7 @@ conn = DynamoDBConnection(
 entities = Table('entities', connection=conn)
 
 fieldconversiondict = {'int': 'Whole Number', 'string': 'Text', 'entity': 'Child Entity', 'float':'Decimal Number', 'file': 'File'}
-
+createbuttonindragdroplist = ['add', 'subtract']
 
 s3conn = boto.connect_s3()
 # s3conn.create_bucket('cruddybucket')
@@ -173,8 +173,8 @@ def seemyform(ename):
 #             newval = oldval + int(valtoincrement)
 #             entityinstancetoact[fieldname] = newval
 #             entityinstancetoact.save()
-        
-        
+
+
 #         # return ('', 204)
 #         return redirect(url_for('seemylist', ename = ename))
 
@@ -257,7 +257,8 @@ def gridmessin(ename):
     fields = json.loads(curentity['fields'])
     goodfields = {}
     for fieldnamenumber, fieldname in fields.iteritems():
-        if fieldnamenumber[0:9] =="fieldname":
+        # if fieldnamenumber[0:9] =="fieldname":
+        if fieldname in createbuttonindragdroplist or fieldnamenumber[0:9] =="fieldname":
             goodfields[fieldnamenumber] = fieldname
     return render_template('gridmessin.html', fields=goodfields)
 
