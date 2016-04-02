@@ -5,17 +5,19 @@
 {% block content %}
 <div>
 {{gridjson}}
+dictl{{dictlist}}
+{{numrows}}
+</div>
+
+<!-- <div id="wrapper" style="text-align: center;"> -->
+  <div style="position: absolute; display: inline-block; border: 3px solid black; padding: 0px; width: 50%; text-align:left; left:0; right:0; margin: auto; height:{{entityboxheight}}px;">
 {% for d in displaylist %}
-{{d}}
-{% endfor %}
-</div>
-<div id="wrapper" style="text-align: center;">
-  <div style="display: inline-block; border: 3px solid black; height: 10px; width: 50%;">
-    <div style="display: inline-block; height: 50px; width: 30%; border: 3px solid black; top: 50px;">
-    </div>
-    <div style="display: inline-block; height: 50px; width: 10%; border: 3px solid black;">
-    </div>
+  <div style="position: absolute; overflow: hidden;padding: 5px; display: inline-block; height: {{d['heightinpx']}}px; width: {{d['widthpercentage']}}%; border: 3px solid black; top: {{d['topamountpx']}}px; margin-left: {{d['leftamountpercent']}}%">
   </div>
-</div>
+{% endfor %}
+  </div>
+<!-- </div> -->
+
+
 
 {% endblock %}

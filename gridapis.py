@@ -20,15 +20,33 @@ conn = DynamoDBConnection(
 )
 entities = Table('entities', connection=conn)
 
+gridheight = 15 # pixels
+# grid width (column size) is defined to be 1/6 of the width of the available space
+
 @grids_api.route('/viewgrid/<ename>', methods=['GET'])
 def viewgrid(ename):
     curentity = entities.get_item(entityname=ename)
     gridjson = curentity['gridjson']
     gridinfo = json.loads(gridjson)
+    entitytable = Table(ename, connection=conn)
+    dictlist = [dict(inst) for inst in entitytable.scan()]
     rownumbers = [gridbox['row'] for gridbox in gridinfo]
     numrows = max(rownumbers)
+    eboxheight = 0
+    for gb in gridinfo:
+        if gb['row'] == numrows:
+            neweboxheight = numrows * gridheight + (gb['size_y']-1) * gridheight
+            if neweboxheight > eboxheight:
+                eboxheight = neweboxheight
     displaylist = []
-    for rownumber in range(1, numrows + 1):
-        rowboxes = [gridbox for gridbox in gridinfo if gridbox['row'] == rownumber]
-        displaylist.append(rowboxes)
-    return render_template('viewgrid.html', gridjson = gridjson, displaylist = displaylist)
+    # for rownumber in range(1, numrows + 1):
+    #     rowboxes = [gridbox for gridbox in gridinfo if gridbox['row'] == rownumber]
+    #     displaylist.append(rowboxes)
+    for box in gridinfo:
+        box['widthpercentage'] = (1/6.0) * box['size_x'] * 100
+        box['heightinpx'] = gridheight * box['size_y']
+        box['topamountpx'] = (box['row'] - 1) * gridheight
+        box['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
+        displaylist.append(box)
+    test = 'hi'
+    return render_template('viewgrid.html', gridjson = gridjson, displaylist = displaylist, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows)
