@@ -41,14 +41,22 @@ def doaction(ename):
             entityinstancetoact[fieldname] = newval
             entityinstancetoact.save()
         # if (action == "")
-        
+
         return ('', 204)
         # return redirect(url_for('seemylist', ename = ename))
 
-@actions_api.route('/test/', methods=['GET'])
-def test():
+@actions_api.route('/editendpoint', methods=['POST'])
+def editendpoint():
+    ename = request.form['entityname']
+    uuid = request.form['uuid']
+    texttochange = request.form['value']
+    fieldnumber = request.form['fieldnumber']
+    entitytable = Table(ename, connection=conn)
+    entityinstance = entitytable.get_item(uuid=uuid)
+    entityinstance['fieldname' + fieldnumber] = texttochange
+    entityinstance.save()
+    return entityinstance['fieldname' + fieldnumber]
 
-    return "hi"
 
 def runactions(newentity, actionname, acc, fieldnumber, actionqualifier, fieldvalue):
     if actionname == 'add':
@@ -60,8 +68,8 @@ def runactions(newentity, actionname, acc, fieldnumber, actionqualifier, fieldva
         buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name ="actionname" value = "'+ actionname+'" > <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="-' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Subtract!</button> </form>'
         newentity['fields']['actionname'] = (Markup(buttontext), '', None)
     if actionname =='edit':
-        newentity['fields']['actionname'] = (fieldvalue, '', None)
-
+        newentity['fields']['actionname'] = ('hi', '', None)
+# <span type="hidden" fieldtoaffect=""
 
 
     return newentity

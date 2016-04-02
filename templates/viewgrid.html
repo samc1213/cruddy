@@ -3,22 +3,22 @@
 {% endblock %}
 {% block title %}View Grid{% endblock %}
 {% block content %}
-<div>
-{{gridinfo}}
+<div style="display:none;" id="curentityjson">
+{{curentityjson}}
 </div>
 
 <!-- <div id="wrapper" style="text-align: center;"> -->
 {% for displaylist in displaylists recursive%}
-  <div style="position: relative; display: inline-block; border: 3px solid black; padding: 0px; width: 50%; text-align:left; left:0; right:0; margin: auto; height:{{entityboxheight}}px; margin-left:25%;">
-{% for d in displaylist recursive %}
-  <div style="position: absolute; overflow: hidden;padding: 5px; display: inline-block; height: {{d['heightinpx']}}px; width: {{d['widthpercentage']}}%; border: 3px solid black; top: {{d['topamountpx']}}px; margin-left: {{d['leftamountpercent']}}%">
+  <div uuid="{{displaylist['uuid']}}"class="entityinstancebox" style="position: relative; display: inline-block; border: 3px solid black; padding: 0px; width: 50%; text-align:left; left:0; right:0; margin: auto; height:{{entityboxheight}}px; margin-left:25%;">
+{% for d in displaylist['fieldinfo'] recursive %}
+  <div style="position: absolute; overflow: hidden;padding: 5px; display: inline-block; height: {{d['heightinpx']}}px; width: {{d['widthpercentage']}}%; border: 3px solid black; top: {{d['topamountpx']}}px; margin-left: {{d['leftamountpercent']}}%;" fieldnum="{{d['fieldnum']}}">
     {{d['value']}}
   </div>
 {% endfor %}
   </div>
 {% endfor %}
 <!-- </div> -->
-
-
-
 {% endblock %}
+{% block javascript %}
+<script type="text/javascript" src="{{url_for('static', filename='js/viewgrid.js')}}"></script>
+{{super()}} {% endblock %}
