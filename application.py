@@ -246,7 +246,15 @@ def gridmessin(ename):
 @application.route('/viewgrid/<ename>', methods=['GET'])
 def viewgrid(ename):
     curentity = entities.get_item(entityname=ename)
-    return render_template('viewgrid.html')
+    gridjson = curentity['gridjson']
+    gridinfo = json.loads(gridjson)
+    rownumbers = [gridbox['row'] for gridbox in gridinfo]
+    numrows = max(rownumbers)
+    displaylist = []
+    for rownumber in range(1, numrows + 1):
+        rowboxes = [gridbox for gridbox in gridinfo if gridbox['row'] == rownumber]
+        displaylist.append(rowboxes)
+    return render_template('viewgrid.html', gridjson = gridjson, displaylist = displaylist)
 
 @application.route('/savegrid/<ename>', methods=['POST'])
 def savegrid(ename):
