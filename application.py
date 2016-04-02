@@ -258,7 +258,7 @@ def gridmessin(ename):
     fields = json.loads(curentity['fields'])
     goodfields = {}
     for fieldnamenumber, fieldname in fields.iteritems():
-        if fieldname in createbuttonindragdroplist:
+        if fieldnamenumber[0:10]=="actionname":
             goodfields[fieldnamenumber] = fieldname
         if fieldnamenumber[0:9] =="fieldname":
             fieldtype = fields['fieldtype' + fieldnamenumber[9:]]

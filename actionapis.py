@@ -67,3 +67,11 @@ def runactions(actionname, acc, fieldnumber, actionqualifier, uuid):
         # application.logger.debug('WOOADD!');
         buttontext =   '<form style="height:100%; width:100%;" action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + uuid + '"> <input type="hidden" name ="actionname" value = "'+ actionname+'" > <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="-' + actionqualifier +'"> <button type="submit" class = "btn btn-default" style="height:100%; width:100%;"> Subtract!</button> </form>'
         return Markup(buttontext)
+    if actionname == 'edit':
+        buttontext =   '<form class = "editform" style="height:100%; width:100%;"> <input type="hidden" name="uuid" id="uuidid" value="' + uuid + '"> <input type="hidden" name ="actionname" value = "'+ actionname+'" > <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"> <button type="submit" class = "btn btn-default" style="height:100%; width:100%;"> Edit!</button> </form>'
+
+        # buttontext = '<form style = "height:100%; width:100%"> <button class = "btn btn-default" style="height:100%; width:100%" fieldnametoedit="' + 'fieldname' + fieldnumber + '>Edit</button></form>'
+        # '<form style0="height:100%; width:100%;" > <input type="hidden" name="uuid" id="uuidid" value="' + uuid + '"> <input type="hidden" name ="actionname" value = "'+ actionname+'" > <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="-' + actionqualifier +'"> <button type="submit" class = "btn btn-default" style="height:100%; width:100%;"> Subtract!</button> </form>'
+        # return Markup(buttontext)
+        return Markup(buttontext)
+
