@@ -28,6 +28,8 @@ def viewgrid(ename):
     curentity = entities.get_item(entityname=ename)
     gridjson = curentity['gridjson']
     gridinfo = json.loads(gridjson)
+    entitytable = Table(ename, connection=conn)
+    dictlist = [dict(inst) for inst in entitytable.scan()]
     # rownumbers = [gridbox['row'] for gridbox in gridinfo]
     # numrows = max(rownumbers)
     displaylist = []
@@ -41,4 +43,4 @@ def viewgrid(ename):
         box['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
         displaylist.append(box)
     test = 'hi'
-    return render_template('viewgrid.html', gridjson = gridjson, displaylist = displaylist)
+    return render_template('viewgrid.html', gridjson = gridjson, displaylist = displaylist, dictlist = dictlist)
