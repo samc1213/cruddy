@@ -13,7 +13,9 @@
 {% for fieldname, value in entityinstance["fields"].iteritems() recursive %}
 
   <dl>
+              {% if fieldname != "actionname" %}
               <dt>{{ fieldname }}</dt>
+              {% endif %}
               {% if value.2 %}
               <dd><i>{{ value.1 }} - {{ value.2 }} </i></dd>
               {% else %}
