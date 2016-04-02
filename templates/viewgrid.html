@@ -32,18 +32,18 @@
     <div class="form-group">
       <label for="fieldtosorton">Sort</label>
       <select type="text" class="form-control" id="waytosort" style="margin-top: 4px;">
-        <option value="newtoold">Newest to Oldest</option>
-        <option value="oldtonew">Oldest to Newest</option>
+        <option value="newtoold">Ascending</option>
+        <option value="oldtonew">Descending</option>
       </select>
-      <select type="text" class="form-control" id="fieldtosorton" style="margin-top: 4px; display:none;">
-        <option value="All-All">All Fields</option>
+      <select type="text" class="form-control" id="fieldtosorton" style="margin-top: 4px;">
+        <option value="creationdate-creationdate">Creation Date</option>
         {% for option in optionslist %}
         <option value="{{option.val}}">{{option.text}}</option>
         {% endfor %}
       </select>
     </div>
 </div>
-<!-- <div id="wrapper" style="text-align: center;"> -->
+<div id="wrapper">
 {% for displaylist in displaylists recursive%}
   <div sortorder="{{displaylist['ordernumber']}}" creationdate="{{displaylist['creationdate']}}" uuid="{{displaylist['uuid']}}"class="entityinstancebox" style="position: relative; display: inline-block; border: 3px solid black; padding: 0px; width: 50%; text-align:left; left:0; right:0; margin: auto; height:{{entityboxheight}}px; margin-left:25%;">
 {% for d in displaylist['fieldinfo'] recursive %}
@@ -51,7 +51,7 @@
 {% endfor %}
   </div>
 {% endfor %}
-<!-- </div> -->
+</div>
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript" src="{{url_for('static', filename='js/viewgrid.js')}}"></script>

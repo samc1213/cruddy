@@ -1,5 +1,9 @@
 $(document).ready(function() {
   $searchinput = $('#searchinput');
+  sort();
+  $("#fieldtosorton").change(sort);
+  $("#waytosort").change(sort);
+  // $('#wrapper').html(sort("creationdate-creationdate"));
   $searchinput.keyup(search);
   $('#fieldtosearchon').change(search);
   $.editable.addInputType('autogrow', {
@@ -46,6 +50,43 @@ $(document).ready(function() {
     event.preventDefault();
   })
 });
+
+function sort(){
+  var waytosort = $("#waytosort").val()
+  var fieldtosorton = $("#fieldtosorton").val().split('-')[1];
+  var fieldnumbertosorton = fieldtosorton.substr(9);
+  var entitytosorton = $("#fieldtosorton").val().split('-')[0];
+  console.log(waytosort + fieldtosorton + entitytosorton + 'fieldnum' + fieldnumbertosorton);
+  newhtml = $(document).find('.entityinstancebox').sort(function(a, b){
+    if (fieldtosorton == "creationdate"){
+      var contentA = $(a).attr('creationdate');
+      var contentB = $(b).attr('creationdate');
+
+    }
+    else{
+      console.log("nOTCREATIL");
+      var contentA = $(a).find('.fielddiv[fieldnum="' + fieldnumbertosorton + '"][entityname="' + entitytosorton + '"]').text();
+      var contentB = $(b).find('.fielddiv[fieldnum="' + fieldnumbertosorton + '"][entityname="' + entitytosorton + '"]').text();
+    }
+    console.log(contentA);
+    console.log(contentB);
+    if (contentA < contentB){
+      console.log("LessMootha");
+    }
+    if (contentA > contentB){
+      console.log("MooreMotha");
+    }
+    if (waytosort == "newtoold"){
+      console.log("ascending");
+      return (contentA > contentB) ? 1 : (contentA < contentB) ?-1 : 0;
+    }
+    else{
+      return (contentA < contentB) ? 1 : (contentA > contentB) ?-1 : 0;
+
+    }
+  });
+  $('#wrapper').html(newhtml);
+}
 
 function search() {
   var searchterm = $searchinput.val();
