@@ -257,9 +257,20 @@ def gridmessin(ename):
     fields = json.loads(curentity['fields'])
     goodfields = {}
     for fieldnamenumber, fieldname in fields.iteritems():
-        # if fieldnamenumber[0:9] =="fieldname":
-        if fieldname in createbuttonindragdroplist or fieldnamenumber[0:9] =="fieldname":
+        if fieldname in createbuttonindragdroplist:
             goodfields[fieldnamenumber] = fieldname
+        if fieldnamenumber[0:9] =="fieldname":
+            fieldtype = fields['fieldtype' + fieldnamenumber[9:]]
+            if fieldtype == 'entity':
+                entitychildname = fields['entitychildname' + fieldnamenumber[9:]]
+                childentityinfo= entities.get_item(entityname = entitychildname)
+                childfieldnames = json.loads(childentityinfo['fields'])
+                for cfn, val in childfieldnames.iteritems():
+                    if cfn[0:9] == 'fieldname':
+                        goodfields[entitychildname + '-' + cfn] = entitychildname + '-' + val
+            else:
+                goodfields[fieldnamenumber] = fieldname
+
     return render_template('gridmessin.html', fields=goodfields)
 
 
