@@ -7,22 +7,52 @@
 {{curentityjson}}
 </div>
 
-<div>
+<!-- <div>
   {{dictlist}}
   {{curentityjson}}
-</div>
+</div> -->
+<!-- <div>
+  {{gridjson}}
+</div> -->
+<div id="filterbox" style="width: 50%; margin:auto; margin-bottom: 15px;">
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="Search for..." id="searchinput">
+    <span class="input-group-btn">
+		<button class = "btn btn-secondary glyphicon glyphicon-search"></button>"
+	</span>
+  </div>
+  <!-- <label for="fieldtosearchon">Field</label> -->
+    <select type="text" class="form-control" id="fieldtosearchon" style="margin-top: 4px;">
+      <option value="All-All">All Fields</option>
+      {% for option in optionslist %}
+      <option value="{{option.val}}">{{option.text}}</option>
+      {% endfor %}
+    </select>
+    -----
+    <div class="form-group">
+      <label for="fieldtosorton">Sort</label>
+      <select type="text" class="form-control" id="waytosort" style="margin-top: 4px;">
+        <option value="oldtonew">Descending</option>
 
-<!-- <div id="wrapper" style="text-align: center;"> -->
+        <option value="newtoold">Ascending</option>
+      </select>
+      <select type="text" class="form-control" id="fieldtosorton" style="margin-top: 4px;">
+        <option value="creationdate-creationdate">Creation Date</option>
+        {% for option in optionslist %}
+        <option value="{{option.val}}">{{option.text}}</option>
+        {% endfor %}
+      </select>
+    </div>
+</div>
+<div id="wrapper">
 {% for displaylist in displaylists recursive%}
-  <div uuid="{{displaylist['uuid']}}"class="entityinstancebox" style="position: relative; display: inline-block; border: 3px solid black; padding: 0px; width: 50%; text-align:left; left:0; right:0; margin: auto; height:{{entityboxheight}}px; margin-left:25%;">
+  <div sortorder="{{displaylist['ordernumber']}}" creationdate="{{displaylist['creationdate']}}" uuid="{{displaylist['uuid']}}"class="entityinstancebox" style="position: relative; display: inline-block; border: 3px solid black; padding: 0px; width: 50%; text-align:left; left:0; right:0; margin: auto; height:{{entityboxheight}}px; margin-left:25%;">
 {% for d in displaylist['fieldinfo'] recursive %}
-  <div style="position: absolute; overflow: hidden;padding: 5px; display: inline-block; height: {{d['heightinpx']}}px; width: {{d['widthpercentage']}}%; border: 3px solid black; top: {{d['topamountpx']}}px; margin-left: {{d['leftamountpercent']}}%;" fieldnum="{{d['fieldnum']}}">
-    {{d['value']}}
-  </div>
+  <div class="fielddiv" style="position: absolute; overflow: hidden;padding: 5px; display: inline-block; height: {{d['heightinpx']}}px; width: {{d['widthpercentage']}}%; border: 3px solid black; top: {{d['topamountpx']}}px; margin-left: {{d['leftamountpercent']}}%;" fieldnum="{{d['fieldnum']}}" entityname="{{d['entityname']}}">{{d['value']}}</div>
 {% endfor %}
   </div>
 {% endfor %}
-<!-- </div> -->
+</div>
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript" src="{{url_for('static', filename='js/viewgrid.js')}}"></script>
