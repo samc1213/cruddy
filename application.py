@@ -36,7 +36,7 @@ conn = DynamoDBConnection(
 # application.logger.debug(conn.list_tables())
 entities = Table('entities', connection=conn)
 
-fieldconversiondict = {'int': 'Whole Number', 'string': 'Text', 'entity': 'Child Entity', 'float':'Decimal Number', 'file': 'File'}
+fieldconversiondict = {'int': 'Whole Number', 'string': 'Text', 'entity': 'Child Entity', 'float':'Decimal Number', 'file': 'File', 'phone': 'Phone Number'}
 createbuttonindragdroplist = ['add', 'subtract']
 
 s3conn = boto.connect_s3()
@@ -113,8 +113,9 @@ def seemyform(ename):
             entitychildinfo = dictlist
             childentity = entities.get_item(entityname=entitychildname)
             childfieldnames = json.loads(childentity['fields'])
-            entitychildtext = ""
+
             for curdict in dictlist:
+                entitychildtext = ""
                 for key, val in curdict.iteritems():
                     if key != "uuid":
                         entitychildtext += (str(childfieldnames[key]) + " | " + str(val))
