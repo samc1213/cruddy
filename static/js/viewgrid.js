@@ -1,4 +1,6 @@
 $(document).ready(function() {
+  $searchinput = $('#searchinput');
+  $searchinput.keyup(search);
   $.editable.addInputType('autogrow', {
     element: function(settings, original){
       var textarea = $('<textarea>');
@@ -43,3 +45,26 @@ $(document).ready(function() {
     event.preventDefault();
   })
 });
+
+function search() {
+  var searchterm = $(this).val();
+  $(document).find('.entityinstancebox').each( function() {
+    var hidethisguy = true;
+    $(this).find('.fielddiv').each( function() {
+      if ($(this).text().indexOf(searchterm) > -1) {
+        hidethisguy = false;
+        console.log($(this).text());
+      }
+    });
+    if (hidethisguy == true) {
+      console.log('HIDE!');
+      // $(this).addClass('hideboy');
+      $(this).css('display', 'none');
+    }
+    else {
+      console.log('KEEP!');
+      $(this).css('display', 'block');
+    }
+  });
+
+}
