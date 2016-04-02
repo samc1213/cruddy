@@ -75,8 +75,8 @@ def form():
             entitychildname = request.form.get(entitychildstring, None)
             if entitychildname:
                 fields[entitychildstring] = entitychildname
-            # PLAEHOLDER - WILL EVENTUALLY STORE NUMACTIONS IN form
-            if fields[typestring] == 'int':
+# PLAEHOLDER - WILL EVENTUALLY STORE NUMACTIONS IN form
+            if (fields[typestring] == 'int' or fields[typestring] == 'string'):
                 numactions = 1
                 for actionnumber in range(1, numactions + 1):
                     actionname = 'actionname' + str(fieldnumber) + '-' + str(actionnumber)
@@ -154,29 +154,29 @@ def seemyform(ename):
 
 
 #code finds the element of the keytochange and has the entityname of the thing, just need to update database, refreshes page aferwards
-@application.route('/doaction/<ename>', methods=['GET', 'POST'])
-def doaction(ename):
-    if request.method == 'POST':
-        uuid = request.form['uuid']
-        fieldname = request.form['fieldname']
-        action = str(request.form['actionname'])
-        entityname = ename
-        entitytable = Table(entityname, connection = conn)
-        entityinstancetoact = entitytable.get_item(
-            uuid=uuid
-        )
-        if (action == "add" or action == "subtract"):
-            oldval = int(entityinstancetoact[fieldname])
-            valtoincrement = request.form['incrementvalue']
-            # application.debug.logger(valtoincrement)
-            # application.debug.logger(oldval)
-            newval = oldval + int(valtoincrement)
-            entityinstancetoact[fieldname] = newval
-            entityinstancetoact.save()
+# @application.route('/doaction/<ename>', methods=['GET', 'POST'])
+# def doaction(ename):
+#     if request.method == 'POST':
+#         uuid = request.form['uuid']
+#         fieldname = request.form['fieldname']
+#         action = str(request.form['actionname'])
+#         entityname = ename
+#         entitytable = Table(entityname, connection = conn)
+#         entityinstancetoact = entitytable.get_item(
+#             uuid=uuid
+#         )
+#         if (action == "add" or action == "subtract"):
+#             oldval = int(entityinstancetoact[fieldname])
+#             valtoincrement = request.form['incrementvalue']
+#             # application.debug.logger(valtoincrement)
+#             # application.debug.logger(oldval)
+#             newval = oldval + int(valtoincrement)
+#             entityinstancetoact[fieldname] = newval
+#             entityinstancetoact.save()
         
         
-        # return ('', 204)
-        return redirect(url_for('seemylist', ename = ename))
+#         # return ('', 204)
+#         return redirect(url_for('seemylist', ename = ename))
 
 @application.route('/seemylist/<ename>', methods=['GET'])
 def seemylist(ename):
@@ -236,7 +236,7 @@ def seemylist(ename):
                     application.logger.debug(actionname)
                     actionqualifier = ""
 
-                newentity = runactions(newentity, actionname, acc, fieldnumber, actionqualifier)
+                newentity = runactions(newentity, actionname, acc, fieldnumber, actionqualifier, fieldvalue)
                 # if actionname == 'add':
                 #     application.logger.debug('WOOADD!');
                     # buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Add!</button> </form>'
