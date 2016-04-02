@@ -49,7 +49,8 @@ $(document).ready(function() {
 
 function search() {
   var searchterm = $searchinput.val();
-  fieldtosearchon = $('#fieldtosearchon').val();
+  fieldtosearchon = $('#fieldtosearchon').val().split('-')[1];
+  entitytosearchon = $('#fieldtosearchon').val().split('-')[0];
   if (fieldtosearchon == 'All') {
   $(document).find('.entityinstancebox').each( function() {
     hidethisguy = true;
@@ -75,7 +76,7 @@ function search() {
     $(document).find('.entityinstancebox').each( function() {
       hidethisguy = true;
       var fieldnumbertosearchon = fieldtosearchon.substr(9);
-      $(this).find('.fielddiv[fieldnum="' + fieldnumbertosearchon + '"]').each( function() {
+      $(this).find('.fielddiv[fieldnum="' + fieldnumbertosearchon + '"][entityname="' + entitytosearchon + '"]').each( function() {
         if ($(this).text().indexOf(searchterm) > -1) {
           hidethisguy = false;
           console.log($(this).text());

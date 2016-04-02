@@ -103,7 +103,10 @@ def viewgrid(ename):
     for box in gridinfo:
         if box['fieldnamenumber'][0:6] != 'action':
             newoption = {}
-            newoption['val'] = box['fieldnamenumber']
+            if len(box['fieldnamenumber'].split('-')) == 1:
+                newoption['val'] = ename + '-' + box['fieldnamenumber']
+            else:
+                newoption['val'] = box['fieldnamenumber']
             newoption['text'] = box['name']
     #     newoption = {}
     #     if fname[0:9] == 'fieldname':
