@@ -5,17 +5,17 @@
 {% block content %}
 <div>
 {{gridjson}}
-{% for d in displaylist %}
-{{d}}
-{% endfor %}
 </div>
+
 <div id="wrapper" style="text-align: center;">
-  <div style="display: inline-block; border: 3px solid black; height: 10px; width: 50%;">
-    <div style="display: inline-block; height: 50px; width: 30%; border: 3px solid black; top: 50px;">
-    </div>
-    <div style="display: inline-block; height: 50px; width: 10%; border: 3px solid black;">
-    </div>
+  <div style="display: inline-block; border: 3px solid black; padding: 10px; width: 50%; text-align:left;">
+{% for d in displaylist %}
+  <div style="display: inline-block; height: {{d['heightinpx']}}px; width: {{d['widthpercentage']}}%; border: 3px solid black; top: {{d['topamountpx']}}px; margin-left: {{d['leftamountpercent']}}%">
+  </div>
+{% endfor %}
   </div>
 </div>
+
+
 
 {% endblock %}
