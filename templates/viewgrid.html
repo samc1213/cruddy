@@ -7,16 +7,24 @@
 {{curentityjson}}
 </div>
 
-<div>
+<!-- <div>
   {{dictlist}}
   {{curentityjson}}
-</div>
-
-<div class = "input-group">
-	<input type="text" class = "form-control" placeholder="Search for..." id="searchinput">
-	<span class ="input-group-btn">
+</div> -->
+<div id="filterbox" style="width: 50%; margin:auto;">
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="Search for..." id="searchinput">
+    <span class="input-group-btn">
 		<button class = "btn btn-secondary glyphicon glyphicon-search"></button>"
 	</span>
+  </div>
+  <label for="fieldtosearchon">Field</label>
+    <select type="text" class="form-control" id="fieldtosearchon">
+      <option value="All">All</option>
+      {% for option in optionslist %}
+      <option value="{{option.val}}">{{option.text}}</option>
+      {% endfor %}
+    </select>
 </div>
 <!-- <div id="wrapper" style="text-align: center;"> -->
 {% for displaylist in displaylists recursive%}

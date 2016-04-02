@@ -96,5 +96,12 @@ def viewgrid(ename):
                 newbox['fieldnum'] = fieldnamenum[10:]
                 displaylist.append(newbox)
         displaylists.append({'fieldinfo': displaylist, 'uuid': d['uuid']})
+    optionslist = []
+    for fname, val in fieldinfo.iteritems():
+        newoption = {}
+        if fname[0:9] == 'fieldname':
+            newoption['val'] = fname
+            newoption['text'] = val
+            optionslist.append(newoption)
     test = 'hi'
-    return render_template('viewgrid.html', gridjson = gridjson, displaylists = displaylists, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows, gridinfo = gridinfo, curentityjson=curentityjson)
+    return render_template('viewgrid.html', gridjson = gridjson, displaylists = displaylists, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows, gridinfo = gridinfo, curentityjson=curentityjson, optionslist=optionslist)
