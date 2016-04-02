@@ -52,12 +52,30 @@ def viewgrid(ename):
         for box in gridinfo:
             newbox = {}
             fieldnamenum = box['fieldnamenumber']
-            if fieldnamenum[0:10] != 'actionname':
+            if (len(fieldnamenum.split('-')) > 1 and fieldnamenum.split('-')[0][0:6] != "action"):
+                fieldna = "fieldname"
+                for fname, fval in fieldinfo.iteritems():
+                    if fval == fieldnamenum.split('-')[0]:
+                        fieldna += fname[-1]
+
+
+
                 newbox['widthpercentage'] = (1/6.0) * box['size_x'] * 100
                 newbox['heightinpx'] = gridheight * box['size_y']
                 newbox['topamountpx'] = (box['row'] - 1) * gridheight
                 newbox['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
-
+                
+                childentitytable = Table(fieldnamenum.split('-')[0], connection = conn)
+                newbox['value'] = childentitytable.get_item(uuid = d[fieldna])[fieldnamenum.split('-')[1]]
+                # newbox['value'] = d[fieldnamenum.split('-')[1]]
+                # newbox['value'] = d[fieldna]
+                newbox['fieldnum'] = fieldnamenum[9:]
+                displaylist.append(newbox)
+            elif fieldnamenum[0:10] != 'actionname':
+                newbox['widthpercentage'] = (1/6.0) * box['size_x'] * 100
+                newbox['heightinpx'] = gridheight * box['size_y']
+                newbox['topamountpx'] = (box['row'] - 1) * gridheight
+                newbox['leftamountpercent'] = (box['col'] - 1) * (1/6.0) * 100
                 newbox['value'] = d[fieldnamenum]
                 newbox['fieldnum'] = fieldnamenum[9:]
                 displaylist.append(newbox)
