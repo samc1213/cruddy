@@ -154,21 +154,27 @@ def seemyform(ename):
 
 
 #code finds the element of the keytochange and has the entityname of the thing, just need to update database, refreshes page aferwards
-@application.route('/increment/<ename>', methods=['GET', 'POST'])
-def increment(ename):
+@application.route('/doaction/<ename>', methods=['GET', 'POST'])
+def doaction(ename):
     if request.method == 'POST':
         uuid = request.form['uuid']
         fieldname = request.form['fieldname']
+        action = str(request.form['actionname'])
         entityname = ename
         entitytable = Table(entityname, connection = conn)
-        entityinstancetoincrement = entitytable.get_item(
+        entityinstancetoact = entitytable.get_item(
             uuid=uuid
         )
-        oldval = int(entityinstancetoincrement[fieldname])
-        valtoincrement = request.form['incrementvalue']
-        newval = oldval + int(valtoincrement)
-        entityinstancetoincrement[fieldname] = newval
-        entityinstancetoincrement.save()
+        if (action == "add" or action == "subtract"):
+            oldval = int(entityinstancetoact[fieldname])
+            valtoincrement = request.form['incrementvalue']
+            # application.debug.logger(valtoincrement)
+            # application.debug.logger(oldval)
+            newval = oldval + int(valtoincrement)
+            entityinstancetoact[fieldname] = newval
+            entityinstancetoact.save()
+        
+        
         # return ('', 204)
         return redirect(url_for('seemylist', ename = ename))
 
@@ -179,7 +185,7 @@ def seemylist(ename):
     curentity = entities.get_item(entityname=ename)
     fields = json.loads(curentity['fields'])
     application.logger.debug("fiels~" + json.dumps(fields))
-    acc = '/increment/' + ename
+    acc = '/doaction/' + ename
     outputentitylist = []
     for d in dictlist:
         newentity = {}
@@ -223,11 +229,17 @@ def seemylist(ename):
                 application.logger.debug('ACTIONname: ' + actionname)
                 actionnumber = field[10:].split('-')[1]
                 fieldnumber = field[10:].split('-')[0]
-                actionqualifier = fields['actionqualifier' + str(actionnumber) + '-1']
-                newentity = runactions(newentity, actionname)
+                try:
+                    application.logger.debug(actionname)
+                    actionqualifier = fields['actionqualifier' +str(fieldnumber)+'-' + str(actionnumber)]
+                except:
+                    application.logger.debug(actionname)
+                    actionqualifier = ""
+
+                newentity = runactions(newentity, actionname, acc, fieldnumber, actionqualifier)
                 # if actionname == 'add':
                 #     application.logger.debug('WOOADD!');
-                #     buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Add!</button> </form>'
+                    # buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Add!</button> </form>'
                 #     newentity['fields']['actionname'] = (Markup(buttontext), '', None)
                 # if actionname == 'subtract':
                 #     application.logger.debug('WOOADD!');

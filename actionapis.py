@@ -24,12 +24,13 @@ entities = Table('entities', connection=conn)
 def test():
     return "hi"
 
-def runactions(newentity, actionname):
+def runactions(newentity, actionname, acc, fieldnumber, actionqualifier):
     if actionname == 'add':
-        application.logger.debug('WOOADD!');
-        buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Add!</button> </form>'
+        # application.logger.debug('WOOADD!');
+        buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name ="actionname" value = "'+ actionname+'" > <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Add!</button> </form>'
         newentity['fields']['actionname'] = (Markup(buttontext), '', None)
     if actionname == 'subtract':
-        application.logger.debug('WOOADD!');
-        buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="-' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Subtract!</button> </form>'
+        # application.logger.debug('WOOADD!');
+        buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name ="actionname" value = "'+ actionname+'" > <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="-' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Subtract!</button> </form>'
         newentity['fields']['actionname'] = (Markup(buttontext), '', None)
+    return newentity
