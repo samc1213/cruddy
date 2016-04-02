@@ -12,6 +12,9 @@ import uuid
 import json
 import os
 from gridapis import grids_api
+from actionapis import actions_api
+from actionapis import runactions
+
 # from forms import RegistrationForm
 DEBUG = True
 SECRET_KEY = 'development key'
@@ -23,6 +26,7 @@ BUCKET_NAME = 'cruddybucket'
 application = Flask(__name__)
 application.config.from_object(__name__)
 application.register_blueprint(grids_api)
+application.register_blueprint(actions_api)
 application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 conn = DynamoDBConnection(
@@ -220,14 +224,15 @@ def seemylist(ename):
                 actionnumber = field[10:].split('-')[1]
                 fieldnumber = field[10:].split('-')[0]
                 actionqualifier = fields['actionqualifier' + str(actionnumber) + '-1']
-                if actionname == 'add':
-                    application.logger.debug('WOOADD!');
-                    buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Add!</button> </form>'
-                    newentity['fields']['actionname'] = (Markup(buttontext), '', None)
-                if actionname == 'subtract':
-                    application.logger.debug('WOOADD!');
-                    buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="-' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Subtract!</button> </form>'
-                    newentity['fields']['actionname'] = (Markup(buttontext), '', None)
+                newentity = runactions(newentity, actionname)
+                # if actionname == 'add':
+                #     application.logger.debug('WOOADD!');
+                #     buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Add!</button> </form>'
+                #     newentity['fields']['actionname'] = (Markup(buttontext), '', None)
+                # if actionname == 'subtract':
+                #     application.logger.debug('WOOADD!');
+                #     buttontext =   '<form action="' + acc + '" method="post"> <input type="hidden" name="uuid" id="uuidid" value="' + newentity["uuid"] + '"> <input type="hidden" name="fieldname" id="fieldnameid" value="' + 'fieldname' + fieldnumber + '"><input type="hidden" name="incrementvalue" value="-' + actionqualifier +'"> <button type="submit" class = "btn btn-default"> Subtract!</button> </form>'
+                #     newentity['fields']['actionname'] = (Markup(buttontext), '', None)
         outputentitylist.append(newentity)
     application.logger.debug(outputentitylist)
 
