@@ -12,10 +12,33 @@ $(document).ready(function() {
   addnewfield();
 });
 
-actionsavailable = {'int':['add', 'subtract'], 'float':null, 'string':null, 'entity':null, 'file':null, 'phone':['textmsg']}
-actionprettytext = {'add': 'Add', 'subtract':'Subtract', 'textmsg':'Text Message'}
-actionqualifiertexts = {'add': 'Amount to Add', 'subtract': 'Amount to Subtract', 'textmsg':'Message To Send'}
-actioninputtypes = {'add': 'number', 'subtract': 'number', 'textmsg': 'text'}
+actionsavailable = {
+  'int':['add', 'subtract'], 
+  'float':null, 
+  'string':['edit'], 
+  'entity':null, 
+  'file':null, 
+  'phone':['textmsg']
+}
+
+actionprettytext = {
+  'add': 'Add',
+  'subtract':'Subtract', 
+  'edit':'Edit',
+  'textmsg':'Text Message'
+}
+actionqualifiertexts = {
+  'add': 'Amount to Add',
+  'subtract': 'Amount to Subtract', 
+  'edit': null,
+  'textmsg':'Message To Send'
+}
+actioninputtypes = {
+  'add': 'number',
+  'subtract': 'number', 
+  'edit': null,
+  'textmsg': 'text'
+}
 
 function actionchange() {
   formgroupnumber = $(this).attr('number');
@@ -62,8 +85,11 @@ function fieldchange() {
     $actionarea.html(actionselectortext);
     var actionnamestring = '#actionname' + formgroupnumber + '-1';
     selectedaction = $(actionnamestring).val();
-    var valueselectortext = '<label>' + actionqualifiertexts[selectedaction] + '</label><input name="actionqualifier' + formgroupnumber + '-1" class="form-control" type="' +  actioninputtypes[selectedaction] + '"/>';
-    $actionarea.find('.actionname').after(valueselectortext);
+    if (actionqualifiertexts[selectedaction] != null){
+      var valueselectortext = '<label>' + actionqualifiertexts[selectedaction] + '</label><input name="actionqualifier' + formgroupnumber + '-1" class="form-control" type="' +  actioninputtypes[selectedaction] + '"/>';
+      $actionarea.find('.actionname').after(valueselectortext);
+
+    }
 
   }
   if ($(this).val() == 'entity') {
