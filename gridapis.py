@@ -126,3 +126,9 @@ def viewgrid(ename):
         displaylists[d]['ordernumber'] = d
     test = 'hi'
     return render_template('viewgrid.html', gridjson = gridjson, displaylists = displaylists, dictlist = dictlist, entityboxheight = eboxheight, numrows = numrows, gridinfo = gridinfo, curentityjson=curentityjson, optionslist=optionslist)
+
+@grids_api.route('/getgrid/<ename>', methods=['GET'])
+def getgrid(ename):
+    curentity = entities.get_item(entityname=ename)
+    gridjson = curentity['gridjson']
+    return gridjson
