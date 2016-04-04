@@ -3,21 +3,25 @@ $(document).ready(function() {
   sort();
   $("#fieldtosorton").change(sort);
   $("#waytosort").change(sort);
-  // $('#wrapper').html(sort("creationdate-creationdate"));
+  // $('input[value="edit"]').parent().submit(function (e) {
+  //   console.log('editsubmit');
+  //   e.preventDefault();
+  // });
+  $('#wrapper').html(sort("creationdate-creationdate"));
   $searchinput.keyup(search);
   $('#fieldtosearchon').change(search);
-  $.editable.addInputType('autogrow', {
-    element: function(settings, original){
-      var textarea = $('<textarea>');
-      textarea.height("100%");
-      textarea.width("100%");
-      $(this).append(textarea);
-      return(textarea);
-    },
-    plugin : function(){
-      $('textarea', this).autogrow(settings, original);
-    }
-  });
+  // $.editable.addInputType('autogrow', {
+  //   element: function(settings, original){
+  //     var textarea = $('<textarea>');
+  //     textarea.height("100%");
+  //     textarea.width("100%");
+  //     $(this).append(textarea);
+  //     return(textarea);
+  //   },
+  //   plugin : function(){
+  //     $('textarea', this).autogrow(settings, original);
+  //   }
+  // });
   curentityjson = $('#curentityjson').text();
   curentityinfo = JSON.parse(curentityjson);
   fieldinfo = JSON.parse(curentityinfo['fields']);
@@ -28,7 +32,7 @@ $(document).ready(function() {
     $(this).find('div').each( function() {
       if (fieldinfo['actionname' + $(this).attr('fieldnum') + '-1'] == 'edit') {
         $(this).editable('/editendpoint', {
-          type : "autogrow",
+          // type : "autogrow",
           tooltip: "Double click to Edit",
           event : "dblclick",
           submitdata : {uuid: $(this).closest('.entityinstancebox').attr('uuid'),

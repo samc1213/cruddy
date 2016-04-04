@@ -77,14 +77,25 @@ def form():
             if entitychildname:
                 fields[entitychildstring] = entitychildname
 # PLAEHOLDER - WILL EVENTUALLY STORE NUMACTIONS IN form
-                numactions = request.form['numactions']
-                for actionnumber in range(1, numactions + 1):
-                    actionname = 'actionname' + str(fieldnumber) + '-' + str(actionnumber)
-                    actionvaluestring = 'actionqualifier' + str(fieldnumber) + '-' + str(actionnumber)
-                    fields[actionname] = request.form[actionname]
+            numactions = int(request.form['numactions'])
+            application.logger.debug("fuckhat" + str(numactions))
+            for actionnumber in range(1, numactions + 1):
+                actionname = 'actionname' + str(fieldnumber) + '-' + str(actionnumber)
+                actionvaluestring = 'actionqualifier' + str(fieldnumber) + '-' + str(actionnumber)
+                application.logger.debug("fuckhat" + str(actionname))
+
+                fields[actionname] = request.form[actionname]
+                application.logger.debug("bitas" + str(actionvaluestring))
+                try:
                     fields[actionvaluestring] = request.form[actionvaluestring]
-        numactions = 1
+                except:
+                    fields[actionvaluestring] = ""
+                application.logger.debug("Freeatlast")
+
+        application.logger.debug("titsmcgee")
+
         inputdata['gridjson'] = "[]"
+        application.logger.debug("bitchwagon")
 
         inputdata['numfields'] = numfields
         inputdata['fields'] = json.dumps(fields)

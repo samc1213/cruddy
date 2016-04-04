@@ -181,7 +181,7 @@ function makenewinputformgroup(formgroupnumber) {
     <option value="file">File</option> \
     <option value="phone">Phone Number</option> \
     </select> \
-    <button type="button" id = "newactionbtn'+formgroupnumber+'" group = "'+formgroupnumber+'" class = "newactionbtn btn btn-default"> Add a New Action! </button> \
+    <button type="button" id = "newactionbtn'+formgroupnumber+'" group = "'+formgroupnumber+'" number ="'+formgroupnumber+'" class = "newactionbtn btn btn-default"> Add a New Action! </button> \
     <input type="hidden" name = "numactions" value = "0">\
     <div class="actionarea">\
     </div> \
