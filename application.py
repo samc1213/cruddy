@@ -77,14 +77,14 @@ def form():
             if entitychildname:
                 fields[entitychildstring] = entitychildname
 # PLAEHOLDER - WILL EVENTUALLY STORE NUMACTIONS IN form
-            if (fields[typestring] == 'int' or fields[typestring] == 'string'):
-                numactions = 1
+                numactions = request.form['numactions']
                 for actionnumber in range(1, numactions + 1):
                     actionname = 'actionname' + str(fieldnumber) + '-' + str(actionnumber)
                     actionvaluestring = 'actionqualifier' + str(fieldnumber) + '-' + str(actionnumber)
                     fields[actionname] = request.form[actionname]
                     fields[actionvaluestring] = request.form[actionvaluestring]
         numactions = 1
+        inputdata['gridjson'] = "[]"
 
         inputdata['numfields'] = numfields
         inputdata['fields'] = json.dumps(fields)
