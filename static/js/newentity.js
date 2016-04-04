@@ -1,6 +1,7 @@
 $(document).ready(function() {
   console.log("ready!");
   numfields = 0;
+  buttonclicked = [false];
   $form = $('#newentityform');
   $newfieldbtn = $('#newfieldbtn');
   $numfieldsinput = $('#numfieldsinput');
@@ -79,11 +80,12 @@ function newactionbtnclick() {
   $actionarea = $(this).siblings('.actionarea');
   var fieldtype = $(this).siblings('.fieldtype').val();
   console.log('ft' + fieldtype);
-  var actionsavailablelist =  actionsavailable[fieldtype]
+  var actionsavailablelist =  actionsavailable[fieldtype];
+  buttonclicked[formgroupnumber] = true;
   if (actionsavailablelist == null) {
     console.log('nully');
     $actionarea.text('There are no actions available for this field type.');
-        $actionarea.siblings('input[name = "numactions"]').val(0);
+    $actionarea.siblings('input[name = "numactions'+ formgroupnumber + '"]').val(0);
 
   }
   else {
@@ -100,19 +102,19 @@ function newactionbtnclick() {
       $actionarea.append(valueselectortext);
 
     }
-    $actionarea.siblings('input[name = "numactions"]').val(1);
+    $actionarea.siblings('input[name = "numactions'+ formgroupnumber + '"]').val(1);
 
 
   }
-  if ($(this).val() == 'entity') {
-    var childentitynamefield = '<label class="entitychildnamelabel" for="entitychildname' + formgroupnumber + '">Entity Child Name:</label> \
-    <input type="text" name="entitychildname' + formgroupnumber + '" id="entitychildname' + formgroupnumber + '" class="form-control entitychildname">';
-    $actionarea.html(childentitynamefield);
-  }
-  else {
-    $(this).siblings('.entitychildname').remove();
-    $(this).siblings('.entitychildnamelabel').remove();
-  }
+  // if ($(this).val() == 'entity') {
+  //   var childentitynamefield = '<label class="entitychildnamelabel" for="entitychildname' + formgroupnumber + '">Entity Child Name:</label> \
+  //   <input type="text" name="entitychildname' + formgroupnumber + '" id="entitychildname' + formgroupnumber + '" class="form-control entitychildname">';
+  //   $actionarea.html(childentitynamefield);
+  // }
+  // else {
+  //   $(this).siblings('.entitychildname').remove();
+  //   $(this).siblings('.entitychildnamelabel').remove();
+  // }
   $(this).hide();
 
 }
@@ -121,29 +123,39 @@ function fieldchange() {
   console.log($(this).attr('number'));
   formgroupnumber = $(this).attr('number');
   $actionarea = $(this).siblings('.actionarea');
+  $button = $(this).siblings('.newactionbtn');
   var fieldtype = $(this).val();
   console.log('ft' + fieldtype);
-  var actionsavailablelist =  actionsavailable[fieldtype]
+  var actionsavailablelist =  actionsavailable[fieldtype];
+
   if (actionsavailablelist == null) {
     console.log('nully');
     $actionarea.text('There are no actions available for this field type.');
-    $actionarea.siblings('input[name = "numactions"]').val(0);
+    $actionarea.siblings('input[name = "numactions'+ formgroupnumber + '"]').val(0);
+    $button.hide();
   }
   else {
-    var actionselectortext = '<label>Action</label><select class="form-control actionname" name="actionname' + formgroupnumber + '-1" id="actionname' + formgroupnumber + '-1" number = "' + formgroupnumber + '">';
-    for (i = 0; i < actionsavailablelist.length; i++) {
-      actionselectortext += '<option number="' + formgroupnumber + '" value="' + actionsavailablelist[i] + '">' + actionprettytext[actionsavailablelist[i]] + '</option>';
-    }
-    actionselectortext += '</select>';
-    $actionarea.html(actionselectortext);
-    var actionnamestring = '#actionname' + formgroupnumber + '-1';
-    selectedaction = $(actionnamestring).val();
-    if (actionqualifiertexts[selectedaction] != null){
-      var valueselectortext = '<label>' + actionqualifiertexts[selectedaction] + '</label><input name="actionqualifier' + formgroupnumber + '-1" class="form-control" type="' +  actioninputtypes[selectedaction] + '"/>';
-      $actionarea.find('.actionname').after(valueselectortext);
+    $actionarea.text('');
+    $button.show();
 
-    }
-    $actionarea.siblings('input[name = "numactions"]').val(1);
+
+    // if (buttonclicked[formgroupnumber]){
+    //   var actionselectortext = '<label>Action</label><select class="form-control actionname" name="actionname' + formgroupnumber + '-1" id="actionname' + formgroupnumber + '-1" number = "' + formgroupnumber + '">';
+    //   for (i = 0; i < actionsavailablelist.length; i++) {
+    //     actionselectortext += '<option number="' + formgroupnumber + '" value="' + actionsavailablelist[i] + '">' + actionprettytext[actionsavailablelist[i]] + '</option>';
+    //   }
+    //   actionselectortext += '</select>';
+    //   $actionarea.html(actionselectortext);
+    //   var actionnamestring = '#actionname' + formgroupnumber + '-1';
+    //   selectedaction = $(actionnamestring).val();
+    //   if (actionqualifiertexts[selectedaction] != null){
+    //     var valueselectortext = '<label>' + actionqualifiertexts[selectedaction] + '</label><input name="actionqualifier' + formgroupnumber + '-1" class="form-control" type="' +  actioninputtypes[selectedaction] + '"/>';
+    //     $actionarea.find('.actionname').after(valueselectortext);
+
+    //   }
+    //   $actionarea.siblings('input[name = "numactions"]').val(1);
+    // }
+      
   }
   if ($(this).val() == 'entity') {
     var childentitynamefield = '<label class="entitychildnamelabel" for="entitychildname' + formgroupnumber + '">Entity Child Name:</label> \
@@ -182,7 +194,7 @@ function makenewinputformgroup(formgroupnumber) {
     <option value="phone">Phone Number</option> \
     </select> \
     <button type="button" id = "newactionbtn'+formgroupnumber+'" group = "'+formgroupnumber+'" number ="'+formgroupnumber+'" class = "newactionbtn btn btn-default"> Add a New Action! </button> \
-    <input type="hidden" name = "numactions" value = "0">\
+    <input type="hidden" name = "numactions'+formgroupnumber+'" value = "0">\
     <div class="actionarea">\
     </div> \
   </div>';

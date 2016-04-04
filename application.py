@@ -77,7 +77,7 @@ def form():
             if entitychildname:
                 fields[entitychildstring] = entitychildname
 # PLAEHOLDER - WILL EVENTUALLY STORE NUMACTIONS IN form
-            numactions = int(request.form['numactions'])
+            numactions = int(request.form['numactions'+str(fieldnumber)])
             application.logger.debug("fuckhat" + str(numactions))
             for actionnumber in range(1, numactions + 1):
                 actionname = 'actionname' + str(fieldnumber) + '-' + str(actionnumber)
