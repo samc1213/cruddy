@@ -51,10 +51,16 @@ def viewgrid(ename):
     for d in dictlist:
         displaylist = []
         creationdate = d['creationdate']
+
         for box in gridinfo:
             newbox = {}
             fieldnamenum = box['fieldnamenumber']
-
+            fontsize = box['fontsize']
+            fontcolor = box['fontcolor']
+            fontstyle = box['fstyle']
+            newbox['fontsize'] = fontsize
+            newbox['fontstyle'] = fontstyle
+            newbox['fontcolor'] = fontcolor
             if (len(fieldnamenum.split('-')) > 1 and fieldnamenum.split('-')[0][0:6] != "action"):
                 fieldna = "fieldname"
                 for fname, fval in fieldinfo.iteritems():
