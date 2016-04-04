@@ -1,4 +1,7 @@
 $(document).ready( function() {
+  $('.addgridbtn').click( function() {
+    $(this).attr('disabled', 'disabled');
+  });
   var url =window.location.href;
   var urlsplitarr = url.split('/');
   var ename = urlsplitarr[urlsplitarr.length - 1];
@@ -33,6 +36,8 @@ $(document).ready( function() {
           }
           widgetstr += '>' + item['name'] + '</li>'
           console.log(widgetstr + item['col'] +  item['row']);
+          var buttonid = 'btn' + item['name'];
+          $("#" + buttonid).attr('disabled', 'disabled');
         //  fieldnamenumber="' + item.fieldnamenumber + '">';
           gridsteryo.add_widget(widgetstr, item['size_x'], item['size_y'], item['col'], item['row']);
       }
