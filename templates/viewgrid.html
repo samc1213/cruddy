@@ -48,7 +48,7 @@
 {% for displaylist in displaylists recursive%}
   <div sortorder="{{displaylist['ordernumber']}}" creationdate="{{displaylist['creationdate']}}" uuid="{{displaylist['uuid']}}"class="entityinstancebox" style="position: relative; display: inline-block; border: 3px solid black; padding: 0px; width: 50%; text-align:left; left:0; right:0; margin: auto; height:{{entityboxheight}}px; margin-left:25%;">
 {% for d in displaylist['fieldinfo'] recursive %}
-  <div class="fielddiv" style="position: absolute; overflow: hidden;padding: 5px; display: inline-block; height: {{d['heightinpx']}}px; width: {{d['widthpercentage']}}%; border: 3px solid black; top: {{d['topamountpx']}}px; margin-left: {{d['leftamountpercent']}}%;" fieldnum="{{d['fieldnum']}}" entityname="{{d['entityname']}}">{{d['value']}}</div>
+  <div class="fielddiv" style="position: absolute; overflow: hidden;padding: 5px; display: inline-block; font-style: {{d['fontstyle']}}; font-size: {{d['fontsize']}}px; color:{{d['fontcolor']}}; height: {{d['heightinpx']}}px; width: {{d['widthpercentage']}}%; border: 3px solid black; top: {{d['topamountpx']}}px; margin-left: {{d['leftamountpercent']}}%;" fieldnum="{{d['fieldnum']}}" entityname="{{d['entityname']}}">{{d['value']}}</div>
 {% endfor %}
   </div>
 {% endfor %}

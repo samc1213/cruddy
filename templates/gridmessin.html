@@ -28,6 +28,23 @@
 <div>
   <button onclick="savegrid()">save grid</button>
 </div>
+<div id="customfontarea">
+  <div>
+    Current Field: <span id="curfieldspan"></span>
+  </div>
+  <input type="hidden" id="currentboxfieldnamenum" value="">
+  <label for="fontsize">Font Size</label>
+  <select id="fontsize" name="fontsize">
+    <select>
+  <label for="fontcolor">Font Color</label>
+  <select id="fontcolor" name="fontcolor">
+
+    <select>
+      <label for="fstyle">Font Style</label>
+      <select id="fstyle" name="fstyle">
+
+        <select>
+</div>
 {% endblock %} {% block javascript %}
 <script type="text/javascript" src="{{url_for('static', filename='js/grid.js')}}"></script>
 {{super()}} {% endblock %}
